@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+table {font-size: 1.2rem	;}
+
+th {
+  background-color : #557CBA;
+  padding:0.7em;
+}
+
+td {
+  padding:0.5em;
+}
+
+tr:nth-child(even) {
+  background-color : #CED4E5;      
+}
+
+tr:nth-child(odd) {
+  background-color : #E8EBF5;      
+}
+
+p.comment,aside {
+  margin-top: 5rem;
+  color:maroon;
+  font-size: 1.3rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
