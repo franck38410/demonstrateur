@@ -1,4 +1,4 @@
-import { Flex, Text, Input, Select, Button, useToast, Image, Box } from '@chakra-ui/react';
+import { Flex, Text, Input, Select,  Heading, FormControl, FormLabel, Button, useToast, Image, Box } from '@chakra-ui/react';
 import { useAccount, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
@@ -41,28 +41,38 @@ export default function reception() {
   }
 
   return (
-    <Flex height="40vh" justifyContent="space-between" alignItems="center" p="2rem">
-        {(isConnected ? (
-          <Flex direction="row">
-            <Text align="center">Receptionner un matériel :</Text>
-
-            <Flex mt="2rem">
-              <Box boxSize='100%'>
-                <Input id="client" placeholder='Référence du client' />
-                <Input id="itemId" placeholder="Identifiant de l'expédition" />
-                <Select id="workflowState" placeholder="Choisir l'option">
+    <Flex width="full" align="center" justifyContent="center">
+      {(isConnected ? (
+        <Box p={2}>
+          <Box textAlign="center">
+            <Heading>Receptionner un matériel</Heading>
+          </Box>
+          <Box my={4} textAlign="left">
+            <form>
+              <FormControl>
+                <FormLabel>Client</FormLabel>
+                <Input id="client" placeholder="Référence du client" />
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Identifiant</FormLabel>
+                <Input id="itemId" placeholder="Id de l'expédition" />
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Etat</FormLabel>
+                <Select id="workflowState" placeholder="Choisir l'état">
                   <option value='0'>Reception</option>
                   <option value='1'>Annulation</option>
-                </Select>
-                <Button onClick={() => receptionner(client.value,itemId.value,workflowState.value)}>Receptionné le matériel</Button><br/><br/>
-              </Box>               
-            </Flex>
-          </Flex>
+              </Select>
+              </FormControl>
+              <Button width="full" mt={4} onClick={() => receptionner(client.value,itemId.value,workflowState.value)}>Receptionner</Button>
+            </form>
+          </Box>
+        </Box>
         ) : (
-            <Box boxSize='100%' margin="100">
-                <Text align="center">Pas connecté</Text>
-            </Box>          
-        ))}
-    </Flex>
+          <Box boxSize='100%' margin="100">
+              <Text align="center">Pas connecté</Text>
+          </Box>          
+      ))}
+  </Flex>
   )
 }
