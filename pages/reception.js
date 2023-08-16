@@ -3,7 +3,7 @@ import { useAccount, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 // Dev : In production the ABI json will be stored into /config/Demonstrateur.json
-import Contract from '../../backend/artifacts/contracts/Demonstrateur.sol/Demonstrateur.json';
+import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 
 export default function reception() {
