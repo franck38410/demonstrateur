@@ -13,7 +13,7 @@ export default function expedition() {
 
   const expedier = async(client, typeMateriel, referenceMateriel) => {
     try {
-      console.log("expedier client= "+client+ "typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
+      console.log("Expedier client= "+client+ "typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
       const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction d'expédition d'un matériel  
       // @param client Adresse qui va recevoir le matériel
