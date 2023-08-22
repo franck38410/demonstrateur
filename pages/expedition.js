@@ -13,7 +13,7 @@ export default function expedition() {
 
   const expedier = async(client, typeMateriel, referenceMateriel) => {
     try {
-      console.log("Expedier client= "+client+ "typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
+      console.log("expedier client= "+client+ "typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
       const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction d'expédition d'un matériel  
       // @param client Adresse qui va recevoir le matériel
@@ -42,32 +42,46 @@ export default function expedition() {
 
   return (
     <Flex width="full" align="center" justifyContent="center">
-      <Box p={2}>
-        <Box textAlign="center">
-          <Heading>Expédier un matériel</Heading>
+      {(isConnected ? (
+        <Box p={2}>
+          <Box textAlign="center">
+            <Heading>Expédier un matériel</Heading>
+          </Box>
+          <Box my={4} textAlign="left">
+            <form>
+              <FormControl mt={6}>
+                <FormLabel>Destinataire</FormLabel>
+                <Select id="destinataire" placeholder="Choisir le destinaire" onChange={() => client.value=destinataire.value } >
+                    <option value='0x005D71CA579843a1C3EeFEd02E5909CF77976761'>Fnac Darty</option>
+                    <option value='0x7Cd33a833dC720Acc8d17bC17edC41cc526FebB2'>Groupe Casino</option>
+                    <option value='0x99296E92ce2D46508535aFA8b7f86eE8927BF8AC'>Editis</option>                    
+              </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Id du Client</FormLabel>
+                <Input id="client" placeholder="Id du client" size="100" />
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Matériel</FormLabel>
+                <Select id="typeMateriel" placeholder="Choisir le matériel">
+                    <option value='0'>Atos Quantum</option>
+                    <option value='1'>Atos S3200</option>
+              </Select>
+              </FormControl>
+              <FormControl mt={6}>
+                <FormLabel>Référence</FormLabel>
+                <Input id="referenceMateriel" placeholder="Référence du matériel" />
+              </FormControl>
+              <Button width="full" mt={4} onClick={() => expedier(client.value,typeMateriel.value,referenceMateriel.value)}>Expédier</Button>
+            </form>
+          </Box>
         </Box>
-        <Box my={4} textAlign="left">
-          <form>
-            <FormControl>
-              <FormLabel>Client</FormLabel>
-              <Input id="client" placeholder="Référence du client" />
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Matériel</FormLabel>
-              <Select id="typeMateriel" placeholder="Choisir le matériel">
-                  <option value='0'>Atos Quantum</option>
-                  <option value='1'>Atos S3200</option>
-            </Select>
-            </FormControl>
-            <FormControl mt={6}>
-              <FormLabel>Référence</FormLabel>
-              <Input id="referenceMateriel" placeholder="Référence du matériel" />
-            </FormControl>
-            <Button width="full" mt={4} onClick={() => expedier(client.value,typeMateriel.value,referenceMateriel.value)}>Expédier</Button>
-          </form>
-        </Box>
-      </Box>
-    </Flex>
+        ) : (
+          <Box boxSize='100%' margin="100">
+              <Text align="center">Pas connecté</Text>
+          </Box>          
+      ))}
+  </Flex>
 
   )
 }
