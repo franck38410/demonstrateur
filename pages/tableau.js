@@ -24,12 +24,13 @@ import React from 'react'
   }
 
   if(json!=null) {
-      const data = JSON.parse(json);
-      const DisplayData=data.map(
+    const data = JSON.parse(json);
+    const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractAddress+"/";
+    const DisplayData=data.map(
         (info)=>{
             return(
                 <tr>
-                    <td>{info.id}</td>
+                    <td><a href={href+info.id} target="_blank">{info.id}</a></td>
                     <td>{info.fournisseur}</td>
                     <td>{info.client}</td>
                     <td>{info.referenceMateriel}</td>
