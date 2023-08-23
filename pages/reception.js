@@ -50,8 +50,8 @@ export default function reception() {
           <Box my={4} textAlign="left">
             <form>
               <FormControl>
-                <FormLabel>Client</FormLabel>
-                <Input id="client" placeholder="Référence du client" />
+                <FormLabel>Id du client</FormLabel>
+                <Input id="client" placeholder="Référence du client" value={ address } />
               </FormControl>
               <FormControl mt={6}>
                 <FormLabel>Identifiant</FormLabel>
