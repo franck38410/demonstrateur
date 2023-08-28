@@ -1,5 +1,5 @@
 import { Flex, Text, Input, Select,  Heading, FormControl, FormLabel, Button, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useSigner } from 'wagmi';
+import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 // Dev : In production the ABI json will be stored into /config/Demonstrateur.json
@@ -7,9 +7,28 @@ import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 
 export default function reception() {
-    const { address, isConnected } = useAccount()
-    const { data: signer } = useSigner()
-    const toast = useToast()
+    const { address, isConnected } = useAccount();
+    const { data: signer } = useSigner();
+    const provider = useProvider()
+    const toast = useToast();
+    const [ids, setIds] = useState([]);
+
+    useEffect(() => {
+      if(isConnected) {
+        getDatas();
+        if(ids.length) {
+          console.log("useEffect ids : "+ids);
+          console.log("useEffect array1 : "+array1);
+        }
+      }
+    }, [])
+  
+    const getDatas = async() => {
+      console.log("useEffect address : "+address);
+      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
+      setIds(await contract.getIdByClient(address));
+    }
 
   const receptionner = async(client, itemId, workflowState) => {
     try {
@@ -53,16 +72,27 @@ export default function reception() {
                 <FormLabel>Id du client</FormLabel>
                 <Input id="client" placeholder="Référence du client" value={ address } />
               </FormControl>
+
               <FormControl mt={6}>
-                <FormLabel>Identifiant</FormLabel>
-                <Input id="itemId" placeholder="Id de l'expédition" />
+                <FormLabel>IDs</FormLabel>
+                {(ids.length ? (
+                  <Select id="itemId">
+                    {ids.map(id => (
+                        <option>{id}</option>
+                    ))}
+                  </Select>
+                ) :
+                (  
+                    <Text>Pas de commande</Text>
+                ))}
               </FormControl>
+
               <FormControl mt={6}>
                 <FormLabel>Etat</FormLabel>
                 <Select id="workflowState" placeholder="Choisir l'état">
                   <option value='0'>Reception</option>
                   <option value='1'>Annulation</option>
-              </Select>
+                </Select>
               </FormControl>
               <Button width="full" mt={4} onClick={() => receptionner(client.value,itemId.value,workflowState.value)}>Receptionner</Button>
             </form>
