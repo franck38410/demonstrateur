@@ -9,6 +9,8 @@ import React from 'react';
   const { isConnected } = useAccount()
   const provider = useProvider()
   const [json, setJson] = useState(null);
+  const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
+  const urlMumbai = "https://mumbai.polygonscan.com/tx/"
 
   useEffect(() => {
     if(isConnected) {
@@ -17,8 +19,6 @@ import React from 'react';
   }, [])
 
   const getDatas = async() => {
-    const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
-    const urlMumbai = "https://mumbai.polygonscan.com/tx/"
     const result = await fetch(urlPolyscan);
     console.log("getDatas status : "+result.status);
     const resultJson = await result.json();
