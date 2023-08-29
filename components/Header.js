@@ -16,6 +16,7 @@ export default function Header() {
                     < ActiveLink children="Tableau de suivi" href="/tableau" />
                     < ActiveLink children="Réception" href="/reception" />
                     < ActiveLink children="Mes Matériels" href="/mesmateriels" />
+                    < ActiveLink children="Historique" href="/historique" />
                 </Flex>
             ) : (
                 < ActiveLink children="Home" href="/" />
