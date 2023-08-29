@@ -18,6 +18,7 @@ import React from 'react';
 
   const getDatas = async() => {
     const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
+    const urlMumbai = "https://mumbai.polygonscan.com/tx/"
     const result = await fetch(urlPolyscan);
     console.log("getDatas status : "+result.status);
     const resultJson = await result.json();
@@ -33,7 +34,7 @@ import React from 'react';
             return(
                 <tr>
                     <td>{info.blockNumber}</td>
-                    <td>{info.hash}</td>
+                    <td><a href={href+info.hash} target="_blank">{info.hash}</a></td>
                     <td>{info.functionName}</td>
                     <td>{info.from}</td>
                     <td>{info.to}</td>
