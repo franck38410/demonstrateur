@@ -10,7 +10,8 @@ import React from 'react';
   const provider = useProvider()
   const [json, setJson] = useState(null);
   const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
-  const urlMumbai = "https://mumbai.polygonscan.com/tx/"
+  const urlMumbaiAddress = "https://mumbai.polygonscan.com/address/""
+  const urlMumbaiTx = "https://mumbai.polygonscan.com/tx/"
 
   useEffect(() => {
     if(isConnected) {
@@ -33,7 +34,7 @@ import React from 'react';
         (info)=>{
             return(
                 <tr>
-                    <td><a href={urlMumbai+info.hash} target="_blank">{info.hash}</a></td>
+                    <td><b><a href={urlMumbaiTx+info.hash} target="_blank">{info.hash}</a></b></td>
                     <td>{info.methodId}</td>
                     <td>{info.functionName}</td>
                     <td>{info.from}</td>
@@ -44,7 +45,7 @@ import React from 'react';
       
       return (
           <div>
-             <center>Adresse du contrat : <b>{contractAddress}</b>
+             <center>Adresse du contrat : <b><a href={urlMumbaiAddress+contractAddress} target="_blank">{contractAddress}</a></b>
               <table class="table table-striped">
                   <thead>
                       <tr>
