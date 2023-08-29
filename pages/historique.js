@@ -34,7 +34,7 @@ import React from 'react';
             return(
                 <tr>
                     <td>{info.blockNumber}</td>
-                    <td><a href={href+info.hash} target="_blank">{info.hash}</a></td>
+                    <td><a href={urlMumbai+info.hash} target="_blank">{info.hash}</a></td>
                     <td>{info.functionName}</td>
                     <td>{info.from}</td>
                     <td>{info.to}</td>
