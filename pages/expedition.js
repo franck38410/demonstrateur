@@ -20,6 +20,7 @@ export default function expedition() {
       // @param typeMateriel quantum=0 s3200=1
       // @param referenceMateriel la référence du materiel
       let transaction = await contract.expedition(client, typeMateriel, referenceMateriel);
+      console.log("transaction= "+transaction.hash);
       transaction.wait();
       toast({
         title: 'Félicitations !',

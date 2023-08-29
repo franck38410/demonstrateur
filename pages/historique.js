@@ -2,9 +2,8 @@ import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import { contractAddress, apiKeyAlchemyProvider } from 'config/constants';
 import React from 'react';
-import ActiveLink from 'components/ActiveLink'
 
  function tableau(){
   const { isConnected } = useAccount()
@@ -14,29 +13,30 @@ import ActiveLink from 'components/ActiveLink'
   useEffect(() => {
     if(isConnected) {
       getDatas();
-      console.log("useEffect json : "+json);
     }
   }, [])
 
   const getDatas = async() => {
-    const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-    setJson(await contract.getJsonCommandes());
+    const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
+    const result = await fetch(urlPolyscan);
+    console.log("getDatas status : "+result.status);
+    const resultJson = await result.json();
+    const data = await resultJson.result;
+    const st = JSON.stringify(data);
+    setJson(st);
   }
 
-  if(json!=null) {
+  if(json) {
     const data = JSON.parse(json);
-    const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractAddress+"/";
     const DisplayData=data.map(
         (info)=>{
             return(
                 <tr>
-                    <td><a href={href+info.id} target="_blank">{info.id}</a></td>
-                    <td>{info.fournisseur}</td>
-                    <td>{info.client}</td>
-                    <td>{info.referenceMateriel}</td>
-                    <td>{info.dateExpedition}</td>
-                    <td>{info.dateReception}</td>
-                    <td>{info.workflowState}</td>
+                    <td>{info.blockNumber}</td>
+                    <td>{info.hash}</td>
+                    <td>{info.functionName}</td>
+                    <td>{info.from}</td>
+                    <td>{info.to}</td>
                 </tr>
             )
         }
@@ -44,17 +44,15 @@ import ActiveLink from 'components/ActiveLink'
       
       return (
           <div>
-             <center>
+             <center>Adresse du contrat : <b>{contractAddress}</b>
               <table class="table table-striped">
                   <thead>
                       <tr>
-                      <th>Id</th>
-                      <th>Fournisseur</th>
-                      <th>Client</th>
-                      <th>Référence</th>
-                      <th>Date Exp</th>
-                      <th>Date Recep</th>
-                      <th>Etat</th>
+                      <th>blockNumber</th>
+                      <th>hash</th>
+                      <th>functionName</th>
+                      <th>from</th>
+                      <th>to</th>
                       </tr>
                   </thead>
                   <tbody>
