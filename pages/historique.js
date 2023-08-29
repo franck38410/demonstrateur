@@ -33,11 +33,10 @@ import React from 'react';
         (info)=>{
             return(
                 <tr>
-                    <td>{info.blockNumber}</td>
                     <td><a href={urlMumbai+info.hash} target="_blank">{info.hash}</a></td>
+                    <td>{info.methodId}</td>
                     <td>{info.functionName}</td>
                     <td>{info.from}</td>
-                    <td>{info.to}</td>
                 </tr>
             )
         }
@@ -49,11 +48,10 @@ import React from 'react';
               <table class="table table-striped">
                   <thead>
                       <tr>
-                      <th>blockNumber</th>
-                      <th>hash</th>
-                      <th>functionName</th>
-                      <th>from</th>
-                      <th>to</th>
+                      <th>Transaction</th>
+                      <th>Méthode</th>
+                      <th>Fonction</th>
+                      <th>Utilisateur</th>
                       </tr>
                   </thead>
                   <tbody>
