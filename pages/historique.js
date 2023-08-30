@@ -35,9 +35,8 @@ import React from 'react';
             return(
                 <tr>
                     <td><b><a href={urlMumbaiTx+info.hash} target="_blank">{info.hash}</a></b></td>
-                    <td>{info.methodId}</td>
-                    <td>{info.functionName}</td>
                     <td>{info.from}</td>
+                    <td>{info.functionName}</td>
                 </tr>
             )
         }
@@ -50,9 +49,8 @@ import React from 'react';
                   <thead>
                       <tr>
                       <th>Transaction</th>
-                      <th>Méthode</th>
-                      <th>Fonction</th>
                       <th>Utilisateur</th>
+                      <th>Fonction</th>
                       </tr>
                   </thead>
                   <tbody>
