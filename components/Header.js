@@ -11,41 +11,55 @@ import { contractAddress } from 'config/constants';
 export default function Header() {
     const provider = useProvider();
     const { address, isConnected } = useAccount();
-    const [nom, setNom] = useState(null);
+    const [role, setRole] = useState(null);
     useEffect(() => {
         if(isConnected) {
           getDatas();
         }
       }, [])
     
-      const getDatas = async() => {
-        console.log("getDatas address : "+address);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-        setNom(await contract.getNomClientByAddress(address));
-      }
+    const getDatas = async() => {
+    console.log("getDatas address : "+address);
+    const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+    setRole(await contract.getRoleByAddress(address));
+    }
 
     return (
         <Flex height="15vh" justifyContent="space-between" alignItems="center" p="2rem">
-            <Image src='/logo.ico' width='100px' height='60px' alt='Logo' />
-            {(isConnected ? (
+            <Image src='/logo.ico' width='100px' height='60px' alt='Atos' />
+            {(isConnected ? ( 
                 <Flex>
                     < ActiveLink children="Home" href="/" />
-                    {nom}
-                    {nom =='Owner' ? (
+                    {role =='Owner' ? (
                         < ActiveLink children="Client" href="/client" />
                     ) : (
                         ""
                     )}
-                    < ActiveLink children="Client" href="/client" />
-                    < ActiveLink children="Expédition" href="/expedition" />
-                    < ActiveLink children="Tableau de suivi" href="/tableau" />
-                    {nom !=='Inconnu' ? (
+                    {role =='Owner' ? (
+                        < ActiveLink children="Expédition" href="/expedition" />
+                    ) : (
+                        ""
+                    )}
+                    {role =='Owner' ? (
+                        < ActiveLink children="Tableau de suivi" href="/tableau" />
+                    ) : (
+                        ""
+                    )}                   
+                    {role =='Owner' || role !=='Client' ? (
                         < ActiveLink children="Réception" href="/reception" />
                     ) : (
                         ""
                     )}
-                    < ActiveLink children="Mes Matériels" href="/mesmateriels" />
-                    < ActiveLink children="Historique" href="/historique" />
+                    {role =='Owner' || role !=='Client' ? (
+                        < ActiveLink children="Mes Matériels" href="/mesmateriels" />
+                    ) : (
+                        ""
+                    )}
+                    {role =='Owner' || role !=='Client' ? (
+                        < ActiveLink children="Historique" href="/historique" />
+                    ) : (
+                        ""
+                    )}                    
                 </Flex>
             ) : (
                 < ActiveLink children="Home" href="/" />
