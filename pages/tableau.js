@@ -31,8 +31,8 @@ import ActiveLink from 'components/ActiveLink'
             return(
                 <tr>
                     <td><a href={href+info.id} target="_blank">{info.id}</a></td>
-                    <td>{info.fournisseur}</td>
-                    <td>{info.client}</td>
+                    <td><span class="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
+                    <td><span class="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
                     <td>{info.referenceMateriel}</td>
                     <td>{info.dateExpedition}</td>
                     <td>{info.dateReception}</td>

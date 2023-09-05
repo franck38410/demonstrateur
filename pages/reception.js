@@ -9,25 +9,23 @@ import { contractAddress } from 'config/constants';
 export default function reception() {
     const { address, isConnected } = useAccount();
     const { data: signer } = useSigner();
-    const provider = useProvider()
+    const provider = useProvider();
     const toast = useToast();
     const [ids, setIds] = useState([]);
+    const [nom, setNom] = useState(null);
 
     useEffect(() => {
       if(isConnected) {
         getDatas();
-        if(ids.length) {
-          console.log("useEffect ids : "+ids);
-          console.log("useEffect array1 : "+array1);
-        }
       }
     }, [])
   
     const getDatas = async() => {
-      console.log("useEffect address : "+address);
+      console.log("getDatas address : "+address);
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
       // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
       setIds(await contract.getIdByClient(address));
+      setNom(await contract.getNomClientByAddress(address));
     }
 
   const receptionner = async(client, itemId, workflowState) => {
@@ -68,9 +66,11 @@ export default function reception() {
           </Box>
           <Box my={4} textAlign="left">
             <form>
+            <FormControl>
+                <FormLabel>Nom du client connecté : { nom }</FormLabel>
+              </FormControl>
               <FormControl>
-                <FormLabel>Id du client</FormLabel>
-                <Input id="client" placeholder="Référence du client" value={ address } />
+                <FormLabel>Id du client : { address }</FormLabel>
               </FormControl>
 
               <FormControl mt={6}>
@@ -94,7 +94,7 @@ export default function reception() {
                   <option value='1'>Annulation</option>
                 </Select>
               </FormControl>
-              <Button width="full" mt={4} onClick={() => receptionner(client.value,itemId.value,workflowState.value)}>Receptionner</Button>
+              <Button width="full" mt={4} onClick={() => receptionner(address,itemId.value,workflowState.value)}>Receptionner</Button>
             </form>
           </Box>
         </Box>
