@@ -7,7 +7,6 @@ import React from 'react';
 
  function tableau(){
   const { isConnected } = useAccount()
-  const provider = useProvider()
   const [json, setJson] = useState(null);
   const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
   const urlMumbaiAddress = "https://mumbai.polygonscan.com/address/";
