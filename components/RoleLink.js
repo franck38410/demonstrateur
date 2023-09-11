@@ -26,37 +26,47 @@ function RoleLink() {
         return (
             <Flex>
                 < ActiveLink children="Home" href="/" />
-                {role =='Owner' ? ( 
+                {role =='Admin' ? ( 
+                    < ActiveLink children="Admin" href="/admin" />
+                ) : (
+                    ""
+                )}
+                {role =='Admin' ? ( 
                     < ActiveLink children="Fournisseur" href="/fournisseur" />
                 ) : (
                     ""
                 )}
-                {role =='Owner' ? ( 
+                {role =='Admin' ? ( 
                     < ActiveLink children="Client" href="/client" />
                 ) : (
                     ""
                 )}
-                {(role =='Owner' | role =='Fournisseur') ? (
+                {(role =='Admin' | role =='Fournisseur') ? (
+                    < ActiveLink children="Tokénisation" href="/tokenisation" />
+                ) : (
+                    ""
+                )}
+                {(role =='Admin' | role =='Fournisseur') ? (
                     < ActiveLink children="Expédition" href="/expedition" />
                 ) : (
                     ""
                 )}
-                {(role =='Owner' | role =='Fournisseur' | role =='Client') ? (
+                {(role =='Admin' | role =='Fournisseur' | role =='Client') ? (
                     < ActiveLink children="Tableau de suivi" href="/tableau" />
                 ) : (
                     ""
                 )}                   
-                {(role =='Owner' | role =='Client') ? (
+                {(role =='Admin' | role =='Client') ? (
                     < ActiveLink children="Réception" href="/reception" />
                 ) : (
                     ""
                 )}
-                {(role =='Owner' | role =='Client') ? (
+                {(role =='Admin' | role =='Client') ? (
                     < ActiveLink children="Mes Matériels" href="/mesmateriels" />
                 ) : (
                     ""
                 )}
-                {(role =='Owner' | role =='Client' | role =='Fournisseur') ? (
+                {(role =='Admin' | role =='Client' | role =='Fournisseur') ? (
                     < ActiveLink children="Historique" href="/historique" />
                 ) : (
                     ""
