@@ -9,7 +9,7 @@ export default function Home() {
       <Flex>
         {(isConnected ? (
           <Box boxSize='100%' margin="100">
-            <Text align="center">Tu es bien connecté tu peux utiliser le démonstrateur !</Text>
+            <Text align="center">Tu es bien connecté tu peux utiliser le démonstrateur ! </Text>
           </Box>  
         ) : (
           <Box boxSize='100%' margin="100">

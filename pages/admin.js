@@ -5,12 +5,12 @@ import { useState, useEffect } from 'react';
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 
-export default function client() {
+export default function admin() {
     const { address, isConnected } = useAccount();
     const { data: signer } = useSigner();
     const provider = useProvider();
     const toast = useToast();
-    const [clients, setClients] = useState([]);
+    const [admins, setAdmins] = useState([]);
 
     useEffect(() => {
       if(isConnected) {
@@ -21,25 +21,25 @@ export default function client() {
     const getDatas = async() => {
       console.log("getDatas address : "+address);
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-      // fonction qui récupére les clients  
-      setClients(await contract.getListeClients());
-      console.log("getListeClients= "+await contract.getListeClients());
+      // fonction qui récupére les admins  
+      setAdmins(await contract.getListeAdmins());
+      console.log("getListeAdmins= "+await contract.getListeAdmins());
 
     }
 
-    const ajouterClient = async(id, nom) => {
+    const ajouterAdmin = async(id, nom) => {
       try {
-        console.log("ajouterClient id= "+id+ " nom= "+nom);
+        console.log("ajouterAdmin id= "+id+ " nom= "+nom);
         const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
-        // fonction d'ajout d'un client
-        let transaction = await contract.ajouterClient(id, nom);
+        // fonction d'ajout d'un Admin
+        let transaction = await contract.ajouterAdmin(id, nom);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();
 
         toast({
           title: 'Félicitations !',
-          description: "Vous avez bien ajouté un client !",
+          description: "Vous avez bien ajouté un Admin !",
           status: 'success',
           duration: 5000,
           isClosable: true,
@@ -48,19 +48,19 @@ export default function client() {
       catch {
         toast({
           title: 'Erreur !',
-          description: "Une erreur est survenue lors l'ajout d'un client",
+          description: "Une erreur est survenue lors l'ajout d'un Admin",
           status: 'error',
           duration: 5000,
           isClosable: true,
         })
       }
     }
-    const supprimerClient = async(id) => {
+    const supprimerAdmin = async(id) => {
       try {
-        console.log("client id= "+id);
+        console.log("supprimerAdmin id= "+id);
         const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
-        // fonction de suppression d'un Client
-        let transaction = await contract.supprimerClient(id);
+        // fonction de suppression d'un Admin
+        let transaction = await contract.supprimerAdmin(id);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();
@@ -88,24 +88,24 @@ export default function client() {
       {(isConnected ? (
         <Box p={2}>
           <Box textAlign="center">
-            <Heading>Gestion des clients</Heading>
+            <Heading>Gestion des Admins</Heading>
           </Box>
           <Box my={4} textAlign="left">
             <form>
               <FormControl>
-                <FormLabel>Nom du Client</FormLabel>
-                <Input id="nomClient" placeholder="Nom du client" size="100" />
+                <FormLabel>Nom de l'Admin</FormLabel>
+                <Input id="nomAdmin" placeholder="Nom de l'Admin" size="100" />
               </FormControl>
               <FormControl>
-                <FormLabel>Id du Client</FormLabel>
-                <Input id="idClient" placeholder="Identifiant du client" size="100" />
+                <FormLabel>Id de l'Admin</FormLabel>
+                <Input id="idAdmin" placeholder="Identifiant de l'Admin" size="100" />
               </FormControl>
 
-              <Button width="full" mt={4} onClick={() => ajouterClient(idClient.value,nomClient.value)}>Ajouter Client</Button>
+              <Button width="full" mt={4} onClick={() => ajouterAdmin(idAdmin.value,nomAdmin.value)}>Ajouter Admin</Button>
 
               <FormControl mt={6}>
-                {(clients.length ? (
-                  <div>
+                {(admins.length ? (
+                 <div>
                   <center>
                   <table class="table table-striped">
                       <thead>
@@ -116,21 +116,20 @@ export default function client() {
                           </tr>
                       </thead>
                       <tbody>
-                      {clients.map(client => (
+                      {admins.map(admin => (
                         <tr>
-                          <td>{client[1]}</td>
-                          <td>{client[0]}</td>
-                          <td><a href="#" onClick={() => supprimerClient(client[0])}>x</a></td>
+                          <td>{admin[1]}</td>
+                          <td>{admin[0]}</td>
+                          <td><a href="#" onClick={() => supprimerAdmin(admin[0])}>x</a></td>
                         </tr>
                       ))}
                       </tbody>
                   </table>
                   </center>
-                </div>
-
-) :
+                 </div>
+                ) :
                 (  
-                    <Text>Pas de clients</Text>
+                    <Text>Pas de admins</Text>
                 ))}
               </FormControl>
             </form>

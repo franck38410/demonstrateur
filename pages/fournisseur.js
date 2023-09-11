@@ -2,7 +2,6 @@ import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, use
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-// Dev : In production the ABI json will be stored into /config/Demonstrateur.json
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 
@@ -56,7 +55,34 @@ export default function fournisseur() {
         })
       }
     }
+    const supprimerFournisseur = async(id) => {
+      try {
+        console.log("supprimerFournisseur id= "+id);
+        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        // fonction de suppression d'un fourniseur
+        let transaction = await contract.supprimerFournisseur(id);
+        console.log("transaction= "+transaction.hash);
+        transaction.wait();
+        getDatas();
 
+        toast({
+          title: 'Félicitations !',
+          description: "Vous avez bien supprimé un fourniseur !",
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+      catch {
+        toast({
+          title: 'Erreur !',
+          description: "Une erreur est survenue lors la suppression d'un Admin",
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
   return (
     <Flex width="full" align="center" justifyContent="center">
       {(isConnected ? (
@@ -86,6 +112,7 @@ export default function fournisseur() {
                           <tr>
                           <th>Nom</th>
                           <th>Id</th>
+                          <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -93,6 +120,7 @@ export default function fournisseur() {
                         <tr>
                           <td>{fournisseur[1]}</td>
                           <td>{fournisseur[0]}</td>
+                          <td><a href="#" onClick={() => supprimerFournisseur(fournisseur[0])}>x</a></td>
                         </tr>
                       ))}
                       </tbody>
