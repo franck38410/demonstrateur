@@ -89,7 +89,7 @@ export default function tokenisation() {
       {(isConnected ? (
         <Box p={2}>
           <Box textAlign="center">
-            <Heading>Expédier un matériel</Heading>
+            <Heading>Tokéniser un matériel</Heading>
           </Box>
           <Box my={4} textAlign="left">
             <form>
