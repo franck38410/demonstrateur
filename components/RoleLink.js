@@ -46,16 +46,16 @@ function RoleLink() {
                 ) : (
                     ""
                 )}
-                {(role =='Admin' | role =='Fournisseur') ? (
-                    < ActiveLink children="Expédition" href="/expedition" />
-                ) : (
-                    ""
-                )}
                 {(role =='Admin' | role =='Fournisseur' | role =='Client') ? (
                     < ActiveLink children="Tableau de suivi" href="/tableau" />
                 ) : (
                     ""
-                )}                   
+                )} 
+                {(role =='Admin' | role =='Fournisseur') ? (
+                    < ActiveLink children="Expédition" href="/expedition" />
+                ) : (
+                    ""
+                )}                  
                 {(role =='Admin' | role =='Client') ? (
                     < ActiveLink children="Réception" href="/reception" />
                 ) : (
