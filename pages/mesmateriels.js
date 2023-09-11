@@ -3,6 +3,7 @@ import { Heading, Text, Image, Box, SimpleGrid } from '@chakra-ui/react';
 import { useAccount } from 'wagmi'
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import React from 'react';
 
 import GetJsonDemonstrateur from '../utils/getJsonDemonstrateur'
 
@@ -12,7 +13,8 @@ const mesmateriels = () => {
 
     useEffect(() => {
         async function fetchData() {
-            setJson(GetJsonDemonstrateur());
+            const st = JSON.stringify(await GetJsonDemonstrateur());
+            setJson(st);
         }
         fetchData();
     }, []);
