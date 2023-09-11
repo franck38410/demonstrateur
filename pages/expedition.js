@@ -12,6 +12,7 @@ export default function expedition() {
     const provider = useProvider();
     const toast = useToast();
     const [clients, setClients] = useState([]);
+    const [ids, setIds] = useState([]);
 
     useEffect(() => {
       if(isConnected) {
@@ -24,8 +25,8 @@ export default function expedition() {
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
       // fonction qui récupére les clients  
       setClients(await contract.getListeClients());
-      console.log("getListeClients= "+await contract.getListeClients());
-
+      // fonction qui récupére les tokens  
+      setIds(await contract.getIdByFournisseur(address));
     }
 
     const ajouterClient = async(address, nom) => {
@@ -55,15 +56,14 @@ export default function expedition() {
       }
     }
 
-  const expedier = async(client, typeMateriel, referenceMateriel) => {
+  const expedier = async(client, itemId) => {
     try {
-      console.log("expedier client= "+client+ " typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
+      console.log("expedier client= "+client+ " itemId= "+itemId);
       const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction d'expédition d'un matériel  
       // @param client Adresse qui va recevoir le matériel
-      // @param typeMateriel quantum=0 s3200=1
-      // @param referenceMateriel la référence du materiel
-      let transaction = await contract.expedition(client, typeMateriel, referenceMateriel);
+      // @param itemId = no du token
+      let transaction = await contract.expedition(client, itemId);
       console.log("transaction= "+transaction.hash);
       transaction.wait();
       toast({
@@ -112,17 +112,19 @@ export default function expedition() {
                 <Input id="client" placeholder="Id du client" size="100" />
               </FormControl>
               <FormControl mt={6}>
-                <FormLabel>Matériel</FormLabel>
-                <Select id="typeMateriel" placeholder="Choisir le matériel">
-                    <option value='0'>Atos Quantum</option>
-                    <option value='1'>Atos S3200</option>
-              </Select>
+                <FormLabel>IDs</FormLabel>
+                {(ids.length ? (
+                  <Select id="itemId">
+                    {ids.map(id => (
+                        <option>{id}</option>
+                    ))}
+                  </Select>
+                ) :
+                (  
+                    <Text>Pas de commande</Text>
+                ))}
               </FormControl>
-              <FormControl mt={6}>
-                <FormLabel>Référence</FormLabel>
-                <Input id="referenceMateriel" placeholder="Référence du matériel" />
-              </FormControl>
-              <Button width="full" mt={4} onClick={() => expedier(client.value,typeMateriel.value,referenceMateriel.value)}>Expédier</Button>
+              <Button width="full" mt={4} onClick={() => expedier(client.value,itemId.value)}>Expédier</Button>
             </form>
           </Box>
         </Box>

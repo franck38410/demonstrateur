@@ -12,7 +12,7 @@ const mesmateriels = () => {
 
     useEffect(() => {
         async function fetchData() {
-            setJson(await GetJsonDemonstrateur());
+            setJson(GetJsonDemonstrateur());
         }
         fetchData();
     }, []);
@@ -23,17 +23,16 @@ const mesmateriels = () => {
         <SimpleGrid columns={[1, null]} spacing='40px'>
         {isConnected ? 
             (
-                {json}!=null ? 
-                (
-                    <Box>
-                    <SimpleGrid columns={[1, null, 2, null]} spacing='10px'>
-                        <Image src={json.image}  width="100" height="100" alt={json.description} borderRadius='lg' />
-                    </SimpleGrid>
-                    </Box>
-                ) :
-                (  
-                    <Text>Json Contract not accessible</Text>
-                )
+                <Box>
+                    {(json ? (
+                        <SimpleGrid columns={[1, null, 2, null]} spacing='10px'>
+                            <Image src={json.image}  width="100" height="100" alt={json.description} borderRadius='lg' />
+                        </SimpleGrid>
+                    ) :
+                    (  
+                        <Text>Json Contract not accessible</Text>
+                    ))}
+                </Box>
             ) :
             (  
                 <Text>non connecté</Text>
