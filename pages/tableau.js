@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 import React from 'react';
-import SimpleDateTime  from 'react-simple-timestamp-to-date';
+import SimpleDate  from '/components/SimpleDate';
 
  function tableau(){
   const { isConnected } = useAccount()
@@ -34,8 +34,8 @@ import SimpleDateTime  from 'react-simple-timestamp-to-date';
                     <td><span class="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
                     <td><span class="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
                     <td>{info.referenceMateriel}</td>
-                    <td><SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDateTime></td>
-                    <td><SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDateTime></td>
+                    <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDate></td>
+                    <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDate></td>
                     <td>{info.workflowState}</td>
                 </tr>
             )
