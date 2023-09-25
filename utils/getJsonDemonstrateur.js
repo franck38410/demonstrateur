@@ -21,7 +21,10 @@ import { contractAddress } from './../config/constants';
             if(!response.ok)
               throw new Error(response.statusText);
 
-        return (await response.json());
+        const json = await response.json();
+        console.log('GetJsonDemonstrateur json description ' + json.description) ;
+
+        return (json);
 
     };
 
