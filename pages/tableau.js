@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 import React from 'react';
-import ActiveLink from 'components/ActiveLink'
+import SimpleDateTime  from 'react-simple-timestamp-to-date';
 
  function tableau(){
   const { isConnected } = useAccount()
@@ -34,8 +34,8 @@ import ActiveLink from 'components/ActiveLink'
                     <td><span class="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
                     <td><span class="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
                     <td>{info.referenceMateriel}</td>
-                    <td>{info.dateExpedition}</td>
-                    <td>{info.dateReception}</td>
+                    <td><SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDateTime></td>
+                    <td><SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDateTime></td>
                     <td>{info.workflowState}</td>
                 </tr>
             )

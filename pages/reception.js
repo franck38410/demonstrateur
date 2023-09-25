@@ -28,15 +28,14 @@ export default function reception() {
       setNom(await contract.getNomClientByAddress(address));
     }
 
-  const receptionner = async(client, itemId, workflowState) => {
+  const receptionner = async(itemId, workflowState) => {
     try {
-      console.log("receptionner client= "+client+ "itemId= "+itemId+" workflowState= "+workflowState);
+      console.log("receptionner itemId= "+itemId+" workflowState= "+workflowState);
       const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction de reception d'un matériel  
-      // @param client Adresse qui valide la reception du matériel
       // @param itemId id du matériel
       // @param workflowState Reception=0 ou Annulation=1
-      let transaction = await contract.reception(client, itemId, workflowState);
+      let transaction = await contract.reception(itemId, workflowState);
       transaction.wait();
       toast({
         title: 'Félicitations !',
@@ -92,9 +91,10 @@ export default function reception() {
                 <Select id="workflowState" placeholder="Choisir l'état">
                   <option value='0'>Reception</option>
                   <option value='1'>Annulation</option>
+                  <option value='2'>Renvoyer</option>
                 </Select>
               </FormControl>
-              <Button width="full" mt={4} onClick={() => receptionner(address,itemId.value,workflowState.value)}>Receptionner</Button>
+              <Button width="full" mt={4} onClick={() => receptionner(itemId.value,workflowState.value)}>Receptionner</Button>
             </form>
           </Box>
         </Box>

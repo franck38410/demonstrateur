@@ -29,33 +29,6 @@ export default function expedition() {
       setIds(await contract.getIdByFournisseur(address));
     }
 
-    const ajouterClient = async(address, nom) => {
-      try {
-        console.log("ajouterClient address= "+address+ " nom= "+nom);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
-        // fonction d'ajout d'un client
-        let transaction = await contract.ajouterClient(address, "Test1");
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
-        toast({
-          title: 'Félicitations !',
-          description: "Vous avez bien ajouté un client !",
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-      catch {
-        toast({
-          title: 'Erreur !',
-          description: "Une erreur est survenue lors de l'expédition",
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-    }
-
   const expedier = async(client, itemId) => {
     try {
       console.log("expedier client= "+client+ " itemId= "+itemId);

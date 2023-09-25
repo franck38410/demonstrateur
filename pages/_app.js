@@ -11,10 +11,11 @@ import { publicProvider } from 'wagmi/providers/public';
 import { ChakraProvider } from '@chakra-ui/react'
 
 import { apiKeyAlchemyProvider } from 'config/constants';
+import { web3dev2 } from 'config/web3dev2';
 import Header from 'components/Header'
 
 const { chains, provider } = configureChains(
-  [hardhat, polygonMumbai],
+  [web3dev2, hardhat, polygonMumbai],
   [
     alchemyProvider({ apiKey: apiKeyAlchemyProvider }),
     publicProvider()

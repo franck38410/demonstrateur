@@ -4,14 +4,15 @@ import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
 // Dev : In production the ABI json will be stored into /config/Demonstrateur.json
 import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import ContractMateriel from '/config/Materiel.json';
+import { contractAddress, materielAddress } from 'config/constants';
 
 export default function tokenisation() {
     const { address, isConnected } = useAccount();
     const { data: signer } = useSigner();
     const provider = useProvider();
     const toast = useToast();
-    const [clients, setClients] = useState([]);
+    const [materiels, setMateriels] = useState([]);
 
     useEffect(() => {
       if(isConnected) {
@@ -21,48 +22,35 @@ export default function tokenisation() {
   
     const getDatas = async() => {
       console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      const contractMateriel = new ethers.Contract(materielAddress, ContractMateriel.abi, provider);
       // fonction qui récupére les clients  
-      setClients(await contract.getListeClients());
-      console.log("getListeClients= "+await contract.getListeClients());
-
+      setMateriels(await contractMateriel.getListeMateriels());
+      console.log("getListeMateriels= "+await contractMateriel.getListeMateriels());
     }
 
-    const ajouterClient = async(address, nom) => {
-      try {
-        console.log("ajouterClient address= "+address+ " nom= "+nom);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
-        // fonction d'ajout d'un client
-        let transaction = await contract.ajouterClient(address, "Test1");
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
-        toast({
-          title: 'Félicitations !',
-          description: "Vous avez bien ajouté un client !",
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-      catch {
-        toast({
-          title: 'Erreur !',
-          description: "Une erreur est survenue lors de l'expédition",
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
-      }
-    }
-
-  const tokenisation = async(typeMateriel, referenceMateriel) => {
+  const tokenisation = async(nomMateriel, referenceMateriel) => {
     try {
-      console.log("tokenisation typeMateriel= "+typeMateriel+" referenceMateriel= "+referenceMateriel);
+      console.log("tokenisation nomMateriel= "+nomMateriel+" referenceMateriel= "+referenceMateriel);
+      var idMateriel = "";
+      var urlImage = "";
+      var uriMateriel = "";
+      for (var m in materiels){
+        if (materiels[m].nomMateriel == nomMateriel)
+        {
+          idMateriel = materiels[m].idMateriel;
+          urlImage = materiels[m].urlImage;
+          uriMateriel = materiels[m].ipfs;
+          console.log(idMateriel);
+        }
+      }
+
       const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction de tokenisation d'un matériel  
-      // @param typeMateriel quantum=0 s3200=1
+      // @param idMateriel id du materiel
+      // @param uriMateriel lien ipfs du materiel
+      // @param urlImage url image
       // @param referenceMateriel la référence du materiel
-      let transaction = await contract.tokenisation(typeMateriel, referenceMateriel);
+      let transaction = await contract.tokenisation(idMateriel, uriMateriel, urlImage, referenceMateriel);
       console.log("transaction= "+transaction.hash);
       transaction.wait();
       toast({
@@ -94,17 +82,23 @@ export default function tokenisation() {
           <Box my={4} textAlign="left">
             <form>
               <FormControl mt={6}>
-                <FormLabel>Matériel</FormLabel>
-                <Select id="typeMateriel" placeholder="Choisir le matériel">
-                    <option value='0'>Atos Quantum</option>
-                    <option value='1'>Atos S3200</option>
-              </Select>
+              <FormLabel>Matériel</FormLabel>
+                {(materiels.length ? (
+                  <Select id="nomMateriel" placeholder="Choisir le matériel">
+                    {materiels.map(materiel => (
+                        <option>{materiel.nomMateriel}</option>
+                    ))}
+                  </Select>
+                ) :
+                (  
+                    <Text>Pas de materiels</Text>
+                ))}
               </FormControl>
               <FormControl mt={6}>
                 <FormLabel>Référence</FormLabel>
                 <Input id="referenceMateriel" placeholder="Référence du matériel" />
               </FormControl>
-              <Button width="full" mt={4} onClick={() => tokenisation(typeMateriel.value,referenceMateriel.value)}>Tokéniser</Button>
+              <Button width="full" mt={4} onClick={() => tokenisation(nomMateriel.value,referenceMateriel.value)}>Tokéniser</Button>
             </form>
           </Box>
         </Box>
