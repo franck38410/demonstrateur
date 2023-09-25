@@ -1,7 +1,7 @@
 import { useToast, Center,  Text,  Card, CardBody, CardFooter, Image, Stack, Heading, Divider, ButtonGroup, Button, Spinner  } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useAccount, useProvider, useSigner } from 'wagmi'
-import SimpleDateTime  from 'react-simple-timestamp-to-date';
+import SimpleDate  from '/components/SimpleDate';
 
 import { ethers } from 'ethers';
 
@@ -19,8 +19,8 @@ function Materiel(props) {
           <Stack mt='6' spacing='3'>            
             <Text>Fournisseur : <b>{props.nomFournisseur}</b></Text>
             <Text>Référence du matériel : {props.referenceMateriel}</Text>
-            <Text>Date d'expédition : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{props.dateExpedition}</SimpleDateTime></Text>
-            <Text>Date de reception : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{props.dateReception}</SimpleDateTime></Text>
+            <Text>Date d'expédition : <SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{props.dateExpedition}</SimpleDate></Text>
+            <Text>Date de reception : <SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{props.dateReception}</SimpleDate></Text>
             <Text>Etat : {props.workflowState}</Text>
           </Stack>
         </CardBody>
