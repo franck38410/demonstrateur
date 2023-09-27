@@ -15,7 +15,7 @@ export default function Header() {
             ) : (
                 < ActiveLink children="Home" href="/" />
             ))}
-            <ConnectButton chainStatus="none" accountStatus="address" label="Connexion Démonstrateur" showBalance={false}/>
+            <ConnectButton label="Connexion Démonstrateur" showBalance={false}/>
         </Flex>
    )
 }
