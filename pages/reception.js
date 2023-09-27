@@ -11,8 +11,8 @@ export default function reception() {
     const { data: signer } = useSigner();
     const provider = useProvider();
     const toast = useToast();
-    const [ids, setIds] = useState([]);
     const [nom, setNom] = useState(null);
+    const [json, setJson] = useState(null);
 
     useEffect(() => {
       if(isConnected) {
@@ -24,8 +24,8 @@ export default function reception() {
       console.log("getDatas address : "+address);
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
       // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
-      setIds(await contract.getIdByClient(address));
       setNom(await contract.getNomClientByAddress(address));
+      setJson(JSON.parse(await contract.getJsonByClient(address)));
     }
 
   const receptionner = async(itemId, workflowState) => {
@@ -68,16 +68,12 @@ export default function reception() {
             <FormControl>
                 <FormLabel>Nom du client connecté : { nom }</FormLabel>
               </FormControl>
-              <FormControl>
-                <FormLabel>Id du client : { address }</FormLabel>
-              </FormControl>
-
               <FormControl mt={6}>
-                <FormLabel>IDs</FormLabel>
-                {(ids.length ? (
+                <FormLabel>Matériel à réceptionner</FormLabel>
+                {(json ? (
                   <Select id="itemId">
-                    {ids.map(id => (
-                        <option>{id}</option>
+                    {json.map(info => (
+                        <option value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
                     ))}
                   </Select>
                 ) :
@@ -87,7 +83,7 @@ export default function reception() {
               </FormControl>
 
               <FormControl mt={6}>
-                <FormLabel>Etat</FormLabel>
+                <FormLabel>Action</FormLabel>
                 <Select id="workflowState" placeholder="Choisir l'état">
                   <option value='0'>Reception</option>
                   <option value='1'>Annulation</option>

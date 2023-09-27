@@ -33,6 +33,7 @@ import SimpleDate  from '/components/SimpleDate';
                     <td><a href={href+info.id} target="_blank">{info.id}</a></td>
                     <td><span class="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
                     <td><span class="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
+                    <td>{info.nomMateriel}</td>
                     <td>{info.referenceMateriel}</td>
                     <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDate></td>
                     <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDate></td>
@@ -51,6 +52,7 @@ import SimpleDate  from '/components/SimpleDate';
                       <th>Id</th>
                       <th>Fournisseur</th>
                       <th>Client</th>
+                      <th>Matériel</th>
                       <th>Référence</th>
                       <th>Date Exp</th>
                       <th>Date Recep</th>

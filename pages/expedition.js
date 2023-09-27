@@ -12,7 +12,7 @@ export default function expedition() {
     const provider = useProvider();
     const toast = useToast();
     const [clients, setClients] = useState([]);
-    const [ids, setIds] = useState([]);
+    const [json, setJson] = useState(null);
 
     useEffect(() => {
       if(isConnected) {
@@ -26,7 +26,7 @@ export default function expedition() {
       // fonction qui récupére les clients  
       setClients(await contract.getListeClients());
       // fonction qui récupére les tokens  
-      setIds(await contract.getIdByFournisseur(address));
+      setJson(JSON.parse(await contract.getJsonByFournisseur(address)));
     }
 
   const expedier = async(client, itemId) => {
@@ -70,7 +70,7 @@ export default function expedition() {
               <FormControl mt={6}>
                 <FormLabel>Clients référencés</FormLabel>
                 {(clients.length ? (
-                    <Select id="destinataire" placeholder="Choisir le destinaire" onChange={() => client.value=destinataire.value } >
+                    <Select id="destinataire" placeholder="Choisir le destinaire" >
                     {clients.map(client => (
                         <option value={client[0]}>{client[1]}</option>
                     ))}
@@ -80,16 +80,12 @@ export default function expedition() {
                     <Text>Pas de clients</Text>
                 ))}
               </FormControl>
-              <FormControl>
-                <FormLabel>Id du Client</FormLabel>
-                <Input id="client" placeholder="Id du client" size="100" />
-              </FormControl>
               <FormControl mt={6}>
-                <FormLabel>IDs</FormLabel>
-                {(ids.length ? (
+                <FormLabel>Matériel à expédier</FormLabel>
+                {(json ? (
                   <Select id="itemId">
-                    {ids.map(id => (
-                        <option>{id}</option>
+                    {json.map(info => (
+                        <option value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
                     ))}
                   </Select>
                 ) :
@@ -97,7 +93,7 @@ export default function expedition() {
                     <Text>Pas de commande</Text>
                 ))}
               </FormControl>
-              <Button width="full" mt={4} onClick={() => expedier(client.value,itemId.value)}>Expédier</Button>
+              <Button width="full" mt={4} onClick={() => expedier(destinataire.value,itemId.value)}>Expédier</Button>
             </form>
           </Box>
         </Box>
