@@ -1,7 +1,7 @@
 import { Chain } from '@wagmi/core'
  
 export const web3dev2 = {
-  id: 1337,
+  id: 1338,
   name: 'Web3dev2',
   network: 'web3dev2',
   nativeCurrency: {
