@@ -1,5 +1,5 @@
 module.exports = function SimpleDate(props){
-
+    if (props.children == 0) return "";
     return (formatDateToReadable(props));
 }
 

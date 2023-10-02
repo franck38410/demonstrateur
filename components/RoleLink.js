@@ -3,8 +3,8 @@ import { Flex } from '@chakra-ui/react';
 import { useAccount, useProvider } from 'wagmi'
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 import ActiveLink from 'components/ActiveLink'
 
 function RoleLink() {
@@ -19,8 +19,8 @@ function RoleLink() {
     
     const getDatas = async() => {
         console.log("getDatas address : "+address);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-        setRole(await contract.getRoleByAddress(address));
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
+        setRole(await contractRole.getRoleByAddress(address));
     }
     if(role!=null) {
         return (
