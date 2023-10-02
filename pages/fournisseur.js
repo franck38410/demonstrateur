@@ -2,8 +2,8 @@ import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, use
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 
 export default function fournisseur() {
     const { address, isConnected } = useAccount();
@@ -20,19 +20,17 @@ export default function fournisseur() {
   
     const getDatas = async() => {
       console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
       // fonction qui récupére les fournisseurs  
-      setFournisseurs(await contract.getListeFournisseurs());
-      console.log("getListeFournisseurs= "+await contract.getListeFournisseurs());
-
+      setFournisseurs(await contractRole.getListeFournisseurs());
     }
 
     const ajouterFournisseur = async(id, nom) => {
       try {
         console.log("ajouterFournisseur id= "+id+ " nom= "+nom);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction d'ajout d'un fournisseur
-        let transaction = await contract.ajouterFournisseur(id, nom);
+        let transaction = await contractRole.ajouterFournisseur(id, nom);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();
@@ -58,9 +56,9 @@ export default function fournisseur() {
     const supprimerFournisseur = async(id) => {
       try {
         console.log("supprimerFournisseur id= "+id);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction de suppression d'un fourniseur
-        let transaction = await contract.supprimerFournisseur(id);
+        let transaction = await contractRole.supprimerFournisseur(id);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();

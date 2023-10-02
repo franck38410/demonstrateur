@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 // Dev : In production the ABI json will be stored into /config/Demonstrateur.json
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 
 export default function expedition() {
     const { address, isConnected } = useAccount();
@@ -23,10 +25,12 @@ export default function expedition() {
     const getDatas = async() => {
       console.log("getDatas address : "+address);
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-      // fonction qui récupére les clients  
-      setClients(await contract.getListeClients());
       // fonction qui récupére les tokens  
-      setJson(JSON.parse(await contract.getJsonByFournisseur(address)));
+      setJson(JSON.parse(await contract.getJsonByFournisseur(address)));      // fonction qui récupére les clients  
+
+      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
+      setClients(await contractRole.getListeClients());
+
     }
 
   const expedier = async(client, itemId) => {

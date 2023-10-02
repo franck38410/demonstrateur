@@ -2,8 +2,8 @@ import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, use
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 
 export default function admin() {
     const { address, isConnected } = useAccount();
@@ -20,19 +20,17 @@ export default function admin() {
   
     const getDatas = async() => {
       console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
       // fonction qui récupére les admins  
-      setAdmins(await contract.getListeAdmins());
-      console.log("getListeAdmins= "+await contract.getListeAdmins());
-
+      setAdmins(await contractRole.getListeAdmins());
     }
 
     const ajouterAdmin = async(id, nom) => {
       try {
         console.log("ajouterAdmin id= "+id+ " nom= "+nom);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction d'ajout d'un Admin
-        let transaction = await contract.ajouterAdmin(id, nom);
+        let transaction = await contractRole.ajouterAdmin(id, nom);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();
@@ -58,9 +56,9 @@ export default function admin() {
     const supprimerAdmin = async(id) => {
       try {
         console.log("supprimerAdmin id= "+id);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction de suppression d'un Admin
-        let transaction = await contract.supprimerAdmin(id);
+        let transaction = await contractRole.supprimerAdmin(id);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();

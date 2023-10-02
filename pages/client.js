@@ -2,8 +2,8 @@ import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, use
 import { useAccount, useProvider, useSigner } from 'wagmi';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 
 export default function client() {
     const { address, isConnected } = useAccount();
@@ -20,19 +20,17 @@ export default function client() {
   
     const getDatas = async() => {
       console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
       // fonction qui récupére les clients  
-      setClients(await contract.getListeClients());
-      console.log("getListeClients= "+await contract.getListeClients());
-
+      setClients(await contractRole.getListeClients());
     }
 
     const ajouterClient = async(id, nom) => {
       try {
         console.log("ajouterClient id= "+id+ " nom= "+nom);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction d'ajout d'un client
-        let transaction = await contract.ajouterClient(id, nom);
+        let transaction = await contractRole.ajouterClient(id, nom);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();
@@ -58,9 +56,9 @@ export default function client() {
     const supprimerClient = async(id) => {
       try {
         console.log("client id= "+id);
-        const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
+        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction de suppression d'un Client
-        let transaction = await contract.supprimerClient(id);
+        let transaction = await contractRole.supprimerClient(id);
         console.log("transaction= "+transaction.hash);
         transaction.wait();
         getDatas();

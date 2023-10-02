@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 // Dev : In production the ABI json will be stored into /config/Demonstrateur.json
 import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
+import ContractRole from '/config/Role.json';
+import { contractRoleAddress } from 'config/constants';
 
 export default function reception() {
     const { address, isConnected } = useAccount();
@@ -24,8 +26,10 @@ export default function reception() {
       console.log("getDatas address : "+address);
       const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
       // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
-      setNom(await contract.getNomClientByAddress(address));
       setJson(JSON.parse(await contract.getJsonByClient(address)));
+
+      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
+      setNom(await contractRole.getNomClientByAddress(address));
     }
 
   const receptionner = async(itemId, workflowState) => {
