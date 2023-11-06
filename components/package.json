@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/react": "^2.5.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@wagmi/connectors": "^3.1.2",
+    "ethers": "^5.7.2",
+    "framer-motion": "^10.10.0",
+    "next": "^13.2.4",
+    "query-string": "^8.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "wagmi": "^0.12.8",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.24",
+    "typescript": "5.2.2"
+  }
+}
