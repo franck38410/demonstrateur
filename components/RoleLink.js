@@ -6,21 +6,32 @@ import { useState, useEffect } from 'react';
 import ContractRole from '/config/Role.json';
 import { contractRoleAddress } from 'config/constants';
 import ActiveLink from 'components/ActiveLink'
+import { useWalletContext } from 'utils/WalletContext';
 
 function RoleLink() {
     const provider = useProvider();
     const { address, isConnected } = useAccount();
     const [role, setRole] = useState(null);
+	const { privateSigner, privateProvider } = useWalletContext();
+
     useEffect(() => {
-        if(isConnected) {
+        if(isConnected || privateSigner != null) {
           getDatas();
         }
       }, [role]) 
     
     const getDatas = async() => {
-        console.log("getDatas address : "+address);
-        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
-        setRole(await contractRole.getRoleByAddress(address));
+        var contractRole = null;
+        if (privateProvider == null)
+        {
+            contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
+            setRole(await contractRole.getRoleByAddress(address));
+        }
+        else
+        {
+            contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, privateProvider);
+            setRole(await contractRole.getRoleByAddress(privateSigner.address));
+        }
     }
     if(role!=null) {
         return (

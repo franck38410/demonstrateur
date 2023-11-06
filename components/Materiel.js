@@ -1,9 +1,5 @@
-import { useToast, Center,  Text,  Card, CardBody, CardFooter, Image, Stack, Heading, Divider, ButtonGroup, Button, Spinner  } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
-import { useAccount, useProvider, useSigner } from 'wagmi'
+import { Center,  Text,  Card, CardBody, CardFooter, Image, Stack, Heading, Divider, ButtonGroup } from '@chakra-ui/react';
 import SimpleDate  from '/components/SimpleDate';
-
-import { ethers } from 'ethers';
 
 function Materiel(props) {
     return (
