@@ -91,7 +91,7 @@ export default function Header() {
 			getDatas();
 			console.log("fin publicConnect");
 		}
-	}, [isConnected, signer, provider, webSocketProvider, isAccountConnected]);
+	}, [isConnected, signer, provider]);
 
     return (
         <Flex height="15vh" justifyContent="space-between" alignItems="center" p="2rem">
