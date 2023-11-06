@@ -8,4 +8,4 @@ export const privateProviderLoc = 'ws://127.0.0.1:8545';
 export const privateProviderWeb3 = 'http://40.85.141.229:8545';
 export const privateProviderWS = 'ws://40.85.141.229:8589';
 export const privateProviderWeb3Clic = 'http://40.85.141.229:8565';
-export const privateProvider = 'https://polygon-mumbai.g.alchemy.com/v2/Y3mDOtUzfEkHU8KaxuyTHKncgaR5Xibb';
+export const privateProvider = 'ws://polygon-mumbai.g.alchemy.com/v2/Y3mDOtUzfEkHU8KaxuyTHKncgaR5Xibb';
