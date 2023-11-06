@@ -25,7 +25,7 @@ function PrivateKeyConnect({ fromPage, privatekeytest }) {
 			console.log("privateConnect wallet.address= "+wallet.address);
 			setIsAccountConnected(true);
 			console.log("privateConnect test ws ");
-			const providerConnected = null;
+			var providerConnected = null;
 			try {
 				providerConnected = new ethers.providers.WebSocketProvider(privateProvider);
 			}
