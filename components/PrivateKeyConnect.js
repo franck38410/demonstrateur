@@ -24,9 +24,9 @@ function PrivateKeyConnect({ fromPage, privatekeytest }) {
 			setAddressConnected(wallet.address);
 			console.log("privateConnect wallet.address= "+wallet.address);
 			setIsAccountConnected(true);
-			//const providerConnected = new ethers.providers.JsonRpcProvider(privateProvider);
+			const providerConnected = new ethers.providers.JsonRpcProvider(privateProvider);
 			console.log("privateConnect av ");
-			const providerConnected = new ethers.providers.WebSocketProvider(privateProvider);
+			//const providerConnected = new ethers.providers.WebSocketProvider(privateProvider);
 			console.log("privateConnect providerConnected= "+providerConnected);
 			const signerConnected = new ethers.Wallet(privateKey, providerConnected);
 			setPrivateProvider(providerConnected);
