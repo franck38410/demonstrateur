@@ -1,23 +1,36 @@
-import { Flex, Text, Box, Heading, Center, List,  ListItem, ListIcon} from '@chakra-ui/react';
-import { useAccount } from 'wagmi';
-import { MdCheckCircle, CheckCircleIcon } from '@chakra-ui/icons'
+import { Flex, Text, Box, Center, List,  ListItem, ListIcon} from '@chakra-ui/react';
+import { CheckCircleIcon } from '@chakra-ui/icons'
+import { useState, useEffect } from 'react';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function Home() {
-  const { isConnected } = useAccount()
+  const [role, setRole] = useState(null);
+  const { isAccountConnected, addressConnected, nomConnected, contractRoleProvider } = useWalletContext();
+
+  useEffect(() => {
+    if(isAccountConnected) {
+      getDatas();
+    }
+  }, [isAccountConnected])
+
+  const getDatas = async() => {
+    // fonction qui récupére le role de la personne connecté  
+    setRole(await contractRoleProvider.getRoleByAddress(addressConnected));
+  }
 
   return (
     <>
       <Flex>
-        {(isConnected ? (
+        {(isAccountConnected ? (
           <Box boxSize='100%' margin="100">
-            <Text align="center">Tu es bien connecté tu peux utiliser le démonstrateur ! </Text>
+            <Center><Text color='black' fontSize='3xl'>Bonjour {nomConnected}, tu es bien connecté avec le rôle {role}, tu peux utiliser le démonstrateur ! </Text></Center>
           </Box>  
         ) : (
           <Box boxSize='100%' margin="100">
-              <Center><Text color='black' fontSize='4xl'>Ce démonstrateur Atos permet de tokéniser des actifs du monde réel.</Text></Center>
+              <Center><Text color='black' fontSize='4xl'>Ce démonstrateur Atos permet de tokéniser des actifs du monde réel sur une blockchain privée.</Text></Center>
               <Center><Text fontSize='3xl'>-</Text></Center>
               <Center>
-              <List>
+              <List fontSize='2xl'>
                 <ListItem>    
                   <ListIcon as={CheckCircleIcon} color='green.500' />
                   Gérer des rôles : admin, fournisseur, client
@@ -45,7 +58,7 @@ export default function Home() {
               </List>
               </Center>
               <Center><Text fontSize='3xl'>-</Text></Center>
-              <Center><Text fontSize='3xl'>Merci de vous connecter avec le bouton 'Connexion Démonstrateur'.</Text></Center>
+              <Center><Text fontSize='3xl'>Merci de vous connecter, vous pouvez utiliser l'aide pour cela.</Text></Center>
           </Box>          
         ))}
       </Flex>

@@ -1,22 +1,20 @@
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress, apiKeyAlchemyProvider } from 'config/constants';
+import { contractDemonstrateurAddress, apiKeyAlchemyProvider } from 'config/constants';
 import React from 'react';
+import { useWalletContext } from 'utils/WalletContext';
 
  function tableau(){
-  const { isConnected } = useAccount()
   const [json, setJson] = useState(null);
-  const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
+  const urlPolyscan = "https://api-testnet.polygonscan.com/api?module=account&action=txlist&address="+contractDemonstrateurAddress+"&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey="+apiKeyAlchemyProvider;
   const urlMumbaiAddress = "https://mumbai.polygonscan.com/address/";
   const urlMumbaiTx = "https://mumbai.polygonscan.com/tx/";
+  const { isAccountConnected } = useWalletContext();
 
   useEffect(() => {
-    if(isConnected) {
+    if(isAccountConnected) {
       getDatas();
     }
-  }, [])
+  }, [isAccountConnected])
 
   const getDatas = async() => {
     const result = await fetch(urlPolyscan);
@@ -32,7 +30,7 @@ import React from 'react';
     const DisplayData=data.map(
         (info)=>{
             return(
-                <tr>
+                <tr key={info.hash}>
                     <td><b><a href={urlMumbaiTx+info.hash} target="_blank">{info.hash}</a></b></td>
                     <td>{info.from}</td>
                     <td>{info.functionName}</td>
@@ -43,8 +41,8 @@ import React from 'react';
       
       return (
           <div>
-             <center>Adresse du contrat : <b><a href={urlMumbaiAddress+contractAddress} target="_blank">{contractAddress}</a></b>
-              <table class="table table-striped">
+             <center>Adresse du contrat : <b><a href={urlMumbaiAddress+contractDemonstrateurAddress} target="_blank">{contractDemonstrateurAddress}</a></b>
+              <table className="table table-striped">
                   <thead>
                       <tr>
                       <th>Transaction</th>

@@ -1,45 +1,34 @@
-import { Flex, Text, Input, Select,  Heading, FormControl, FormLabel, Button, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Select,  Heading, FormControl, FormLabel, Button, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-// Dev : In production the ABI json will be stored into /config/Demonstrateur.json
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
-import ContractRole from '/config/Role.json';
-import { contractRoleAddress } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function reception() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [nom, setNom] = useState(null);
     const [json, setJson] = useState(null);
+    const { isAccountConnected, addressConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractRoleProvider } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+      console.log("getDatas addressConnected : "+addressConnected);
       // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
-      setJson(JSON.parse(await contract.getJsonByClient(address)));
-
-      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
-      setNom(await contractRole.getNomClientByAddress(address));
+      setJson(JSON.parse(await contractDemonstrateurProvider.getJsonByClient(addressConnected)));
+      // fonction qui récupére le nom du client connecté  
+      setNom(await contractRoleProvider.getNomClientByAddress(addressConnected));
     }
 
   const receptionner = async(itemId, workflowState) => {
     try {
       console.log("receptionner itemId= "+itemId+" workflowState= "+workflowState);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction de reception d'un matériel  
       // @param itemId id du matériel
       // @param workflowState Reception=0 ou Annulation=1
-      let transaction = await contract.reception(itemId, workflowState);
+      let transaction = await contractDemonstrateurSigner.reception(itemId, workflowState);
       transaction.wait();
       toast({
         title: 'Félicitations !',
@@ -62,7 +51,7 @@ export default function reception() {
 
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Receptionner un matériel</Heading>
@@ -77,7 +66,7 @@ export default function reception() {
                 {(json ? (
                   <Select id="itemId">
                     {json.map(info => (
-                        <option value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
+                        <option key={info.id} value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
                     ))}
                   </Select>
                 ) :

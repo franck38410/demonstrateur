@@ -1,40 +1,30 @@
-import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Input, Heading, FormControl, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import ContractRole from '/config/Role.json';
-import { contractRoleAddress } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function client() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [clients, setClients] = useState([]);
+    const { isAccountConnected, contractRoleProvider, contractRoleSigner } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
       // fonction qui récupére les clients  
-      setClients(await contractRole.getListeClients());
+      setClients(await contractRoleProvider.getListeClients());
     }
 
     const ajouterClient = async(id, nom) => {
       try {
         console.log("ajouterClient id= "+id+ " nom= "+nom);
-        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction d'ajout d'un client
-        let transaction = await contractRole.ajouterClient(id, nom);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+        let transaction = await contractRoleSigner.ajouterClient(id, nom);
+        await transaction.wait();
         getDatas();
-
         toast({
           title: 'Félicitations !',
           description: "Vous avez bien ajouté un client !",
@@ -56,11 +46,9 @@ export default function client() {
     const supprimerClient = async(id) => {
       try {
         console.log("client id= "+id);
-        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction de suppression d'un Client
-        let transaction = await contractRole.supprimerClient(id);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+        let transaction = await contractRoleSigner.supprimerClient(id);
+        await transaction.wait();
         getDatas();
 
         toast({
@@ -83,7 +71,7 @@ export default function client() {
     }
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Gestion des clients</Heading>
@@ -105,7 +93,7 @@ export default function client() {
                 {(clients.length ? (
                   <div>
                   <center>
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                       <thead>
                           <tr>
                           <th>Nom</th>
@@ -115,7 +103,7 @@ export default function client() {
                       </thead>
                       <tbody>
                       {clients.map(client => (
-                        <tr>
+                        <tr key={client[0]}>
                           <td>{client[1]}</td>
                           <td>{client[0]}</td>
                           <td><a href="#" onClick={() => supprimerClient(client[0])}>x</a></td>

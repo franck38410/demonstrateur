@@ -1,33 +1,24 @@
-import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-// Dev : In production the ABI json will be stored into /config/Demonstrateur.json
-import Contract from '/config/Demonstrateur.json';
-import ContractMateriel from '/config/Materiel.json';
-import { contractAddress, materielAddress } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function tokenisation() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [materiels, setMateriels] = useState([]);
+    const { isAccountConnected, contractDemonstrateurSigner, contractMaterielProvider } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contractMateriel = new ethers.Contract(materielAddress, ContractMateriel.abi, provider);
       // fonction qui récupére les clients  
-      setMateriels(await contractMateriel.getListeMateriels());
-      console.log("getListeMateriels= "+await contractMateriel.getListeMateriels());
+      setMateriels(await contractMaterielProvider.getListeMateriels());
+      console.log("getListeMateriels= "+await contractMaterielProvider.getListeMateriels());
     }
-
+  
   const tokenisation = async(nomMateriel, referenceMateriel) => {
     try {
       console.log("tokenisation nomMateriel= "+nomMateriel+" referenceMateriel= "+referenceMateriel);
@@ -44,13 +35,12 @@ export default function tokenisation() {
         }
       }
 
-      const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction de tokenisation d'un matériel  
       // @param idMateriel id du materiel
       // @param uriMateriel lien ipfs du materiel
       // @param urlImage url image
       // @param referenceMateriel la référence du materiel
-      let transaction = await contract.tokenisation(idMateriel, uriMateriel, urlImage, referenceMateriel);
+      let transaction = await contractDemonstrateurSigner.tokenisation(idMateriel, uriMateriel, urlImage, referenceMateriel);
       console.log("transaction= "+transaction.hash);
       transaction.wait();
       toast({
@@ -74,7 +64,7 @@ export default function tokenisation() {
 
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Tokéniser un matériel</Heading>
@@ -86,7 +76,7 @@ export default function tokenisation() {
                 {(materiels.length ? (
                   <Select id="nomMateriel" placeholder="Choisir le matériel">
                     {materiels.map(materiel => (
-                        <option>{materiel.nomMateriel}</option>
+                        <option key={materiel.nomMateriel}>{materiel.nomMateriel}</option>
                     ))}
                   </Select>
                 ) :

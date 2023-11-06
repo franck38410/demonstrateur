@@ -1,26 +1,22 @@
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import Contract from '/config/Demonstrateur.json';
 import { contractAddress } from 'config/constants';
 import React from 'react';
 import SimpleDate  from '/components/SimpleDate';
+import { useWalletContext } from 'utils/WalletContext';
 
  function tableau(){
-  const { isConnected } = useAccount()
-  const provider = useProvider()
   const [json, setJson] = useState(null);
+  const { isAccountConnected, privateProvider, contractDemonstrateurProvider } = useWalletContext();
 
   useEffect(() => {
-    if(isConnected) {
+    if(isAccountConnected) {
       getDatas();
       console.log("useEffect json : "+json);
     }
-  }, [])
+  }, [isAccountConnected])
 
   const getDatas = async() => {
-    const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-    setJson(await contract.getJsonCommandes());
+    setJson(await contractDemonstrateurProvider.getJsonCommandes());
   }
 
   if(json!=null) {
@@ -29,10 +25,10 @@ import SimpleDate  from '/components/SimpleDate';
     const DisplayData=data.map(
         (info)=>{
             return(
-                <tr>
+                <tr key={info.id}>
                     <td><a href={href+info.id} target="_blank">{info.id}</a></td>
-                    <td><span class="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
-                    <td><span class="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
+                    <td><span className="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
+                    <td><span className="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
                     <td>{info.nomMateriel}</td>
                     <td>{info.referenceMateriel}</td>
                     <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDate></td>
@@ -46,7 +42,7 @@ import SimpleDate  from '/components/SimpleDate';
       return (
           <div>
              <center>
-              <table class="table table-striped">
+              <table className="table table-striped">
                   <thead>
                       <tr>
                       <th>Id</th>

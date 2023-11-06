@@ -1,40 +1,30 @@
-import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Input, Heading, FormControl, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import ContractRole from '/config/Role.json';
-import { contractRoleAddress } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function fournisseur() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [fournisseurs, setFournisseurs] = useState([]);
+    const { isAccountConnected, contractRoleProvider, contractRoleSigner } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
       // fonction qui récupére les fournisseurs  
-      setFournisseurs(await contractRole.getListeFournisseurs());
+      setFournisseurs(await contractRoleProvider.getListeFournisseurs());
     }
 
     const ajouterFournisseur = async(id, nom) => {
       try {
         console.log("ajouterFournisseur id= "+id+ " nom= "+nom);
-        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction d'ajout d'un fournisseur
-        let transaction = await contractRole.ajouterFournisseur(id, nom);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+        let transaction = await contractRoleSigner.ajouterFournisseur(id, nom);
+        await transaction.wait();
         getDatas();
-
         toast({
           title: 'Félicitations !',
           description: "Vous avez bien ajouté un Fournisseur !",
@@ -56,11 +46,9 @@ export default function fournisseur() {
     const supprimerFournisseur = async(id) => {
       try {
         console.log("supprimerFournisseur id= "+id);
-        const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, signer);
         // fonction de suppression d'un fourniseur
-        let transaction = await contractRole.supprimerFournisseur(id);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+        let transaction = await contractRoleSigner.supprimerFournisseur(id);
+        await transaction.wait();
         getDatas();
 
         toast({
@@ -83,7 +71,7 @@ export default function fournisseur() {
     }
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Gestion des fournisseurs</Heading>
@@ -105,7 +93,7 @@ export default function fournisseur() {
                 {(fournisseurs.length ? (
                  <div>
                   <center>
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                       <thead>
                           <tr>
                           <th>Nom</th>
@@ -115,7 +103,7 @@ export default function fournisseur() {
                       </thead>
                       <tbody>
                       {fournisseurs.map(fournisseur => (
-                        <tr>
+                        <tr key={fournisseur[0]}>
                           <td>{fournisseur[1]}</td>
                           <td>{fournisseur[0]}</td>
                           <td><a href="#" onClick={() => supprimerFournisseur(fournisseur[0])}>x</a></td>

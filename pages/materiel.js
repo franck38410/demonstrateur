@@ -1,42 +1,52 @@
-import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Input, Heading, FormControl, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import ContractMateriel from '/config/Materiel.json';
-import { materielAddress } from 'config/constants';
+import { ipfsFormat } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function materiel() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [materiels, setMateriels] = useState([]);
+    const { isAccountConnected, addressConnected, contractMaterielProvider, contractMaterielSigner, privateSigner } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(materielAddress, ContractMateriel.abi, provider);
+      console.log("getDatas addressConnected : "+addressConnected);
       // fonction qui récupére les Materiels  
-      setMateriels(await contract.getListeMateriels());
-      console.log("getListeMateriels= "+await contract.getListeMateriels());
-
+      setMateriels(await contractMaterielProvider.getListeMateriels());
     }
-
-    const ajouterMateriel = async(nomMateriel, ipfs, urlImage) => {
-      try {
-        console.log("ajouterMateriel nomMateriel= "+nomMateriel+" ipfs= "+ipfs+" urlImage= "+urlImage);
-        const contract = new ethers.Contract(materielAddress, ContractMateriel.abi, signer);
-        // fonction d'ajout d'un Materiel
-        let transaction = await contract.ajouterMateriel(address, nomMateriel, ipfs, urlImage);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+/*
+    useEffect(() => {
+        contractMaterielProvider.on("AjouterMaterielEvent", (sender, addressFss, nomMateriel, ipfs, urlImage) => {
+          toast({
+              title: 'Vous avez bien ajouté le materiel :',
+              description: nomMateriel,
+              status: 'success',
+              duration: 8000,
+              isClosable: true,
+          })
+        })
         getDatas();
-
+        return () => {
+          contractMaterielProvider.removeAllListeners();
+        };
+    }, [])
+*/
+    const ajouterMateriel = async(nomMateriel, cid ) => {
+      try {
+        console.log("ajouterMateriel nomMateriel= "+nomMateriel+" cid= "+cid);
+        const response = await fetch(ipfsFormat.replace('CID', cid));
+        const jsonIpfs = await response.json();
+        const urlImage = jsonIpfs.image;
+        const ipfs = "ipfs://" + cid + "/";
+        // fonction d'ajout d'un Materiel 
+        let transaction = await contractMaterielSigner.ajouterMateriel(addressConnected, nomMateriel, ipfs, urlImage);
+        await transaction.wait();
+        getDatas();
         toast({
           title: 'Félicitations !',
           description: "Vous avez bien ajouté un Materiel !",
@@ -58,11 +68,9 @@ export default function materiel() {
     const supprimerMateriel = async(id) => {
       try {
         console.log("Materiel id= "+id);
-        const contract = new ethers.Contract(materielAddress, Contract.abi, signer);
         // fonction de suppression d'un Materiel
-        let transaction = await contract.supprimerMateriel(id);
-        console.log("transaction= "+transaction.hash);
-        transaction.wait();
+        let transaction = await contractMaterielSigner.supprimerMateriel(id);
+        await transaction.wait();
         getDatas();
 
         toast({
@@ -85,7 +93,7 @@ export default function materiel() {
     }
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Gestion des Materiels</Heading>
@@ -97,34 +105,30 @@ export default function materiel() {
                 <Input id="nomMateriel" placeholder="Nom du Materiel" size="100" />
               </FormControl>
               <FormControl>
-                <FormLabel>Lien ipfs du Materiel</FormLabel>
-                <Input id="ipfs" placeholder="Référence du Materiel" size="100" />
+                <FormLabel>CID du Materiel</FormLabel>
+                <Input id="cid" placeholder="CID du lien IPFS du Materiel" size="100" />
               </FormControl>
-              <FormControl>
-                <FormLabel>Url de l'image</FormLabel>
-                <Input id="urlImage" placeholder="url de l'image" size="100" />
-              </FormControl>
-              <Button width="full" mt={4} onClick={() => ajouterMateriel(nomMateriel.value, ipfs.value, urlImage.value)}>Ajouter Materiel</Button>
+              <Button width="full" mt={4} onClick={() => ajouterMateriel(nomMateriel.value, cid.value)}>Ajouter Materiel</Button>
 
               <FormControl mt={6}>
                 {(materiels.length ? (
                   <div>
                   <center>
-                  <table class="table table-striped">
+                  <table className="table table-striped">
                       <thead>
                           <tr>
                           <th>Nom</th>
-                          <th>Ipfs</th>
+                          <th>CID</th>
                           <th>Url Image</th>
                           <th></th>
                           </tr>
                       </thead>
                       <tbody>
                       {materiels.map(materiel => (
-                        <tr>
+                        <tr key={materiel[2]}>
                           <td>{materiel[2]}</td>
                           <td>{materiel[3]}</td>
-                          <td>{materiel[4]}</td>
+                          <td><a href={materiel[4]} target="_blank">Lien image</a></td>                    
                           <td><a href="#" onClick={() => supprimerMateriel(materiel[0])}>x</a></td>
                         </tr>
                       ))}
@@ -133,7 +137,7 @@ export default function materiel() {
                   </center>
                 </div>
 
-) :
+                ) :
                 (  
                     <Text>Pas de Materiels</Text>
                 ))}

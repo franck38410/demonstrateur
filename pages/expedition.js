@@ -1,47 +1,34 @@
-import { Flex, Text, Input, Heading, FormControl, Select, Button, FormLabel, useToast, Image, Box } from '@chakra-ui/react';
-import { useAccount, useProvider, useSigner } from 'wagmi';
-import { ethers } from 'ethers';
+import { Flex, Text, Heading, FormControl, Select, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-// Dev : In production the ABI json will be stored into /config/Demonstrateur.json
-import Contract from '/config/Demonstrateur.json';
-import { contractAddress } from 'config/constants';
-import ContractRole from '/config/Role.json';
-import { contractRoleAddress } from 'config/constants';
+import { useWalletContext } from 'utils/WalletContext';
 
 export default function expedition() {
-    const { address, isConnected } = useAccount();
-    const { data: signer } = useSigner();
-    const provider = useProvider();
     const toast = useToast();
     const [clients, setClients] = useState([]);
     const [json, setJson] = useState(null);
+    const { isAccountConnected, addressConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractRoleProvider } = useWalletContext();
 
     useEffect(() => {
-      if(isConnected) {
+      if(isAccountConnected) {
         getDatas();
       }
-    }, [])
+    }, [isAccountConnected])
   
     const getDatas = async() => {
-      console.log("getDatas address : "+address);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
-      // fonction qui récupére les tokens  
-      setJson(JSON.parse(await contract.getJsonByFournisseur(address)));      // fonction qui récupére les clients  
-
-      const contractRole = new ethers.Contract(contractRoleAddress, ContractRole.abi, provider);
-      setClients(await contractRole.getListeClients());
-
+      console.log("getDatas addressConnected : "+addressConnected);
+      // fonction qui récupére le json des matériels  
+      setJson(JSON.parse(await contractDemonstrateurProvider.getJsonByFournisseur(addressConnected)));      // fonction qui récupére les clients  
+      // fonction qui récupére les clients  
+      setClients(await contractRoleProvider.getListeClients());
     }
 
   const expedier = async(client, itemId) => {
     try {
       console.log("expedier client= "+client+ " itemId= "+itemId);
-      const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
       // fonction d'expédition d'un matériel  
       // @param client Adresse qui va recevoir le matériel
       // @param itemId = no du token
-      let transaction = await contract.expedition(client, itemId);
-      console.log("transaction= "+transaction.hash);
+      let transaction = await contractDemonstrateurSigner.expedition(client, itemId);
       transaction.wait();
       toast({
         title: 'Félicitations !',
@@ -64,7 +51,7 @@ export default function expedition() {
 
   return (
     <Flex width="full" align="center" justifyContent="center">
-      {(isConnected ? (
+      {(isAccountConnected ? (
         <Box p={2}>
           <Box textAlign="center">
             <Heading>Expédier un matériel</Heading>
@@ -76,7 +63,7 @@ export default function expedition() {
                 {(clients.length ? (
                     <Select id="destinataire" placeholder="Choisir le destinaire" >
                     {clients.map(client => (
-                        <option value={client[0]}>{client[1]}</option>
+                        <option key={client[0]} value={client[0]}>{client[1]}</option>
                     ))}
                   </Select>
                 ) :
@@ -89,7 +76,7 @@ export default function expedition() {
                 {(json ? (
                   <Select id="itemId">
                     {json.map(info => (
-                        <option value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
+                        <option key={info.id} value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
                     ))}
                   </Select>
                 ) :
