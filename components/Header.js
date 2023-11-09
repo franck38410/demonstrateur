@@ -3,7 +3,7 @@ import { Flex, Image, Button, Stack, useToast } from '@chakra-ui/react';
 import { useAccount, useConnect, useDisconnect, useProvider, useSigner, useWebSocketProvider   } from 'wagmi';
 import ActiveLink from 'components/ActiveLink';
 import RoleLink from 'components/RoleLink';
-import { contractDemonstrateurAddress, contractRoleAddress, contractMaterielAddress } from 'config/constants';
+import { privateProvider, contractDemonstrateurAddress, contractRoleAddress, contractMaterielAddress } from 'config/constants';
 import Contract from '/config/Demonstrateur.json';
 import ContractRole from '/config/Role.json';
 import ContractMateriel from '/config/Materiel.json';
@@ -63,7 +63,14 @@ export default function Header() {
 			// fonction qui récupére le nom du connecté
 			setNomConnected(await contractRoleProvider.getNomByAddress(address));
 			setVersionContrat(await contractDemonstrateurProvider.getVersion());
-		}	
+		}
+		else
+		{
+			// Version affichée sur le logo
+			const providerNonConnecté = new ethers.providers.JsonRpcProvider(privateProvider);
+			const provider = new ethers.Contract(contractDemonstrateurAddress, Contract.abi, providerNonConnecté);
+			setVersionContrat(await provider.getVersion());
+		}
 	}
 
 	useEffect(() => {
@@ -75,6 +82,7 @@ export default function Header() {
 		else
 		{
 			console.log("Etat de la connexion : non connecté");
+			getDatas();
 		}
 		if (isConnected)
 		{
