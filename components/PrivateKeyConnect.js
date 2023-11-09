@@ -1,5 +1,5 @@
 'use client';
-import { Button, Stack, useToast, Input } from '@chakra-ui/react';
+import { Button, Stack, Input } from '@chakra-ui/react';
 import { privateProvider, contractDemonstrateurAddress, contractRoleAddress, contractMaterielAddress } from 'config/constants';
 import Contract from '/config/Demonstrateur.json';
 import ContractRole from '/config/Role.json';
@@ -10,11 +10,10 @@ import { useRouter } from 'next/router';
 
 function PrivateKeyConnect({ fromPage, privatekeytest }) {
 	const router = useRouter();
-	const toast = useToast(); 
-	const { isAccountConnected, setIsAccountConnected, setAddressConnected, 
+	const { setIsAccountConnected, setAddressConnected, 
 		setNomConnected, setVersionContrat,
 		setContractDemonstrateurProvider, setContractDemonstrateurSigner, 
-		contractRoleProvider, setContractRoleProvider, setContractRoleSigner, 
+		setContractRoleProvider, setContractRoleSigner, 
 		setContractMaterielProvider, setContractMaterielSigner, 
 		setPrivateSigner, setPrivateProvider} = useWalletContext();
 
@@ -24,16 +23,17 @@ function PrivateKeyConnect({ fromPage, privatekeytest }) {
 			setAddressConnected(wallet.address);
 			console.log("privateConnect wallet.address= "+wallet.address);
 			setIsAccountConnected(true);
-			console.log("privateConnect test ws ");
 			var providerConnected = null;
-			try {
+			if (privateProvider.startsWith("ws"))
+			{
+				console.log("privateConnect en ws ");
 				providerConnected = new ethers.providers.WebSocketProvider(privateProvider);
-			}
-			catch {
-				// connexion en https
-				console.log("privateConnect ws ko en https ");
+			}	
+			else
+			{
+				console.log("privateConnect en https ");
 				providerConnected = new ethers.providers.JsonRpcProvider(privateProvider);
-			}				
+			}	
 			console.log("privateConnect providerConnected= "+providerConnected);
 			const signerConnected = new ethers.Wallet(privateKey, providerConnected);
 			setPrivateProvider(providerConnected);
@@ -48,7 +48,7 @@ function PrivateKeyConnect({ fromPage, privatekeytest }) {
 			setNomConnected(await (new ethers.Contract(contractRoleAddress, ContractRole.abi, providerConnected)).getNomByAddress(wallet.address));
 			setVersionContrat(await (new ethers.Contract(contractDemonstrateurAddress, Contract.abi, providerConnected)).getVersion());
 
-			console.log("privateConnect privateConnect fin");
+			console.log("privateConnect fin");
 	}
 
     return (
