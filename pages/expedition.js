@@ -1,10 +1,11 @@
-import { Flex, Text, Heading, FormControl, Select, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
+import { Flex, Text, Heading, FormControl, Select, Button, FormLabel, useToast, Box, Checkbox } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { useWalletContext } from 'utils/WalletContext';
 
 export default function expedition() {
     const toast = useToast();
     const [clients, setClients] = useState([]);
+    const [iots, setIots] = useState([]);
     const [json, setJson] = useState(null);
     const { isAccountConnected, addressConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractRoleProvider } = useWalletContext();
 
@@ -20,6 +21,8 @@ export default function expedition() {
       setJson(JSON.parse(await contractDemonstrateurProvider.getJsonByFournisseur(addressConnected)));      // fonction qui récupére les clients  
       // fonction qui récupére les clients  
       setClients(await contractRoleProvider.getListeClients());
+      // fonction qui récupére les iots  
+      setIots(await contractRoleProvider.getListeIots());
     }
 
   const expedier = async(client, itemId) => {
@@ -58,8 +61,21 @@ export default function expedition() {
           </Box>
           <Box my={4} textAlign="left">
             <form>
+            <FormControl mt={6}>
+                <FormLabel>Matériel à expédier</FormLabel>
+                {(json ? (
+                  <Select id="itemId">
+                    {json.map(info => (
+                        <option key={info.id} value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
+                    ))}
+                  </Select>
+                ) :
+                (  
+                    <Text>Pas de commande</Text>
+                ))}
+              </FormControl>
               <FormControl mt={6}>
-                <FormLabel>Clients référencés</FormLabel>
+                <FormLabel>Liste des Clients</FormLabel>
                 {(clients.length ? (
                     <Select id="destinataire" placeholder="Choisir le destinaire" >
                     {clients.map(client => (
@@ -72,17 +88,20 @@ export default function expedition() {
                 ))}
               </FormControl>
               <FormControl mt={6}>
-                <FormLabel>Matériel à expédier</FormLabel>
-                {(json ? (
-                  <Select id="itemId">
-                    {json.map(info => (
-                        <option key={info.id} value={info.id}>{info.nomMateriel}-{info.referenceMateriel}</option>
+                <FormLabel>Liste des Iots</FormLabel>
+                {(iots.length ? (
+                    <Select id="destinataireIot" placeholder="Choisir l'iot de réception (facultatif)" >
+                    {iots.map(iot => (
+                        <option key={iot[0]} value={iot[0]}>{iot[1]}</option>
                     ))}
                   </Select>
                 ) :
                 (  
-                    <Text>Pas de commande</Text>
+                    <Text>Pas d'iots</Text>
                 ))}
+              </FormControl>
+              <FormControl mt={6}>
+                <Checkbox>Générer un QR code de réception (facultatif)</Checkbox>
               </FormControl>
               <Button width="full" mt={4} onClick={() => expedier(destinataire.value,itemId.value)}>Expédier</Button>
             </form>

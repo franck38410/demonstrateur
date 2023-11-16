@@ -49,6 +49,10 @@ export default function Home() {
                 </ListItem>
                 <ListItem>
                   <ListIcon as={CheckCircleIcon} color='green.500' />
+                  Réceptionner un matériel à partir d'un IoT
+                </ListItem>
+                <ListItem>
+                  <ListIcon as={CheckCircleIcon} color='green.500' />
                   Afficher mes matériels
                 </ListItem>
                 <ListItem>

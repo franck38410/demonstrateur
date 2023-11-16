@@ -4,9 +4,8 @@ import { useWalletContext } from 'utils/WalletContext';
 
 export default function reception() {
     const toast = useToast();
-    const [nom, setNom] = useState(null);
     const [json, setJson] = useState(null);
-    const { isAccountConnected, addressConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractRoleProvider } = useWalletContext();
+    const { isAccountConnected, addressConnected, nomConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractRoleProvider } = useWalletContext();
 
     useEffect(() => {
       if(isAccountConnected) {
@@ -18,8 +17,6 @@ export default function reception() {
       console.log("getDatas addressConnected : "+addressConnected);
       // fonction qui récupére les Ids d'expédition correspondant à l'adresse de l'utilisateur  
       setJson(JSON.parse(await contractDemonstrateurProvider.getJsonByClient(addressConnected)));
-      // fonction qui récupére le nom du client connecté  
-      setNom(await contractRoleProvider.getNomClientByAddress(addressConnected));
     }
 
   const receptionner = async(itemId, workflowState) => {
@@ -59,7 +56,7 @@ export default function reception() {
           <Box my={4} textAlign="left">
             <form>
             <FormControl>
-                <FormLabel>Nom du client connecté : { nom }</FormLabel>
+                <FormLabel>Nom du client connecté : { nomConnected }</FormLabel>
               </FormControl>
               <FormControl mt={6}>
                 <FormLabel>Matériel à réceptionner</FormLabel>

@@ -33,6 +33,7 @@ import { useWalletContext } from 'utils/WalletContext';
                     <td>{info.referenceMateriel}</td>
                     <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDate></td>
                     <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDate></td>
+                    <td><span className="infobulle" aria-label={info.addressReception}>{info.nomReception}</span></td>
                     <td>{info.workflowState}</td>
                 </tr>
             )
@@ -52,6 +53,7 @@ import { useWalletContext } from 'utils/WalletContext';
                       <th>Référence</th>
                       <th>Date Exp</th>
                       <th>Date Recep</th>
+                      <th>Recep par</th>
                       <th>Etat</th>
                       </tr>
                   </thead>

@@ -32,7 +32,7 @@ export default function Aide() {
       <Flex>
           <Box boxSize='100%' margin="100">
           <Center><Text color='black' fontSize='4xl'>Pour utiliser le démonstrateur vous devez être connecté.</Text></Center>
-          <Center><Text color='black' fontSize='3xl'>Il existe 3 rôles différents :</Text></Center>
+          <Center><Text color='black' fontSize='3xl'>Il existe 4 rôles différents :</Text></Center>
               <Center><Text fontSize='3xl'>-</Text></Center>
               <Center>              
               <List fontSize='2xl'>
@@ -47,6 +47,10 @@ export default function Aide() {
                 <ListItem>
                   <CircleIcon color='blue.500'/>
                   le rôle '<b>Client</b>' : permet de receptionner/retourner des matériels, d'afficher la liste de mes matériels ...
+                </ListItem>
+                <ListItem>
+                  <CircleIcon color='blue.500'/>
+                  le rôle '<b>IoT</b>' : permet de receptionner des matériels à partir d'un objet intelligent
                 </ListItem>
               </List>
               </Center>
