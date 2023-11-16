@@ -52,6 +52,11 @@ function RoleLink() {
                 ) : (
                     ""
                 )}
+                {role =='Admin' ? ( 
+                    < ActiveLink children="IoT" href="/iot" />
+                ) : (
+                    ""
+                )}
                 {(role =='Admin' | role =='Fournisseur') ? (
                     < ActiveLink children="Matériel" href="/materiel" />
                 ) : (
@@ -62,7 +67,7 @@ function RoleLink() {
                 ) : (
                     ""
                 )}
-                {(role =='Admin' | role =='Fournisseur' | role =='Client') ? (
+                {(role =='Admin' | role =='Fournisseur' | role =='Client' | role =='Iot') ? (
                     < ActiveLink children="Tableau de suivi" href="/tableau" />
                 ) : (
                     ""
