@@ -1,7 +1,7 @@
 export const apiKeyAlchemyProvider = 'Y3mDOtUzfEkHU8KaxuyTHKncgaR5Xibb';
-export const contractDemonstrateurAddress = '0xE3E10C5FC267Db8523B628c32667cE77085659c8';
-export const contractRoleAddress = '0xeF944007c1681b79a4235cd6CD419fb3603efc9a';
-export const contractMaterielAddress = '0xD1DF5FA837Cb243B0D0B4BF6Ed7a638f9Dbe233F';
+export const contractDemonstrateurAddress = '0x356CD6a9c740CC6659D165d888C0BC54cdf7198e';
+export const contractRoleAddress = '0x87B48206467C80c2Fd55d1fB5a17b4ac22284538';
+export const contractMaterielAddress = '0x5Cb5e4c24774b4c6C25D70965F1c889BA0c96886';
 export const openseaUrl = 'https://testnets.opensea.io/fr/account';
 export const ipfsFormat = 'https://CID.ipfs.nftstorage.link';
 export const privateProviderLoc = 'http://127.0.0.1:8545';
