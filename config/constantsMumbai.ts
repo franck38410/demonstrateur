@@ -1,11 +1,11 @@
 export const apiKeyAlchemyProvider = 'Y3mDOtUzfEkHU8KaxuyTHKncgaR5Xibb';
-export const contractDemonstrateurAddress = '0xE3E10C5FC267Db8523B628c32667cE77085659c8';
-export const contractRoleAddress = '0xeF944007c1681b79a4235cd6CD419fb3603efc9a';
-export const contractMaterielAddress = '0xD1DF5FA837Cb243B0D0B4BF6Ed7a638f9Dbe233F';
+export const contractDemonstrateurAddress = '0x8183E760Cd36e70B20E9984BB72dcA17951626D2';
+export const contractRoleAddress = '0xcD2FB840fC41806173292EF4A02D56d4dB0d19C4';
+export const contractMaterielAddress = '0x2fb54d1F220483C7c84CD6Ab66173bEef6d5e253';
 export const openseaUrl = 'https://testnets.opensea.io/fr/account';
 export const ipfsFormat = 'https://CID.ipfs.nftstorage.link';
-export const privateProviderLoc = 'http://127.0.0.1:8545';
+export const privateProviderLoc = 'ws://127.0.0.1:8545';
 export const privateProviderWeb3 = 'http://40.85.141.229:8545';
-export const privateProviderws = 'ws://40.85.141.229:8589';
+export const privateProviderWS = 'ws://40.85.141.229:8589';
 export const privateProviderWeb3Clic = 'http://40.85.141.229:8565';
 export const privateProvider = 'https://polygon-mumbai.g.alchemy.com/v2/Y3mDOtUzfEkHU8KaxuyTHKncgaR5Xibb';
