@@ -20,7 +20,7 @@ export default function tokenisation() {
     }
   
   const tokenisation = async(nomMateriel, referenceMateriel) => {
-
+    try {
       console.log("tokenisation nomMateriel= "+nomMateriel+" referenceMateriel= "+referenceMateriel);
       var idMateriel = "";
       var urlImage = "";
@@ -50,7 +50,16 @@ export default function tokenisation() {
         duration: 5000,
         isClosable: true,
       })
-
+    }
+    catch {
+      toast({
+        title: 'Erreur !',
+        description: "Une erreur est survenue lors de la tokenisation",
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
   }
 
   return (

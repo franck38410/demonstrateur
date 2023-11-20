@@ -20,7 +20,6 @@ export default function reception() {
     }
 
   const receptionner = async(itemId, workflowState) => {
-    try {
       console.log("receptionner itemId= "+itemId+" workflowState= "+workflowState);
       // fonction de reception d'un matériel  
       // @param itemId id du matériel
@@ -34,16 +33,7 @@ export default function reception() {
         duration: 5000,
         isClosable: true,
       })
-    }
-    catch {
-      toast({
-        title: 'Erreur !',
-        description: "Une erreur est survenue lors de la reception",
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      })
-    }
+
   }
 
   return (

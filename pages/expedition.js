@@ -25,13 +25,18 @@ export default function expedition() {
       setIots(await contractRoleProvider.getListeIots());
     }
 
-  const expedier = async(client, itemId) => {
+  const expedier = async(client, iot, itemId) => {
     try {
-      console.log("expedier client= "+client+ " itemId= "+itemId);
       // fonction d'expédition d'un matériel  
       // @param client Adresse qui va recevoir le matériel
+      // @param iot = iot qui peut receptionner le materiel
       // @param itemId = no du token
-      let transaction = await contractDemonstrateurSigner.expedition(client, itemId);
+      if (iot.length == 0)
+      {
+        iot="0x0000000000000000000000000000000000000000";
+      }
+      console.log("expedier client= "+client+ " iot= "+iot + " itemId= "+itemId);
+      let transaction = await contractDemonstrateurSigner.expedition(client, iot, itemId);
       transaction.wait();
       toast({
         title: 'Félicitations !',
@@ -103,7 +108,7 @@ export default function expedition() {
               <FormControl mt={6}>
                 <Checkbox>Générer un QR code de réception (facultatif)</Checkbox>
               </FormControl>
-              <Button width="full" mt={4} onClick={() => expedier(destinataire.value,itemId.value)}>Expédier</Button>
+              <Button width="full" mt={4} onClick={() => expedier(destinataire.value,destinataireIot.value,itemId.value)}>Expédier</Button>
             </form>
           </Box>
         </Box>
