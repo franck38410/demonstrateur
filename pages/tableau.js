@@ -16,6 +16,7 @@ import { useWalletContext } from 'utils/WalletContext';
   }, [isAccountConnected])
 
   const getDatas = async() => {
+    console.log(await contractDemonstrateurProvider.getJsonCommandes());
     setJson(await contractDemonstrateurProvider.getJsonCommandes());
   }
 
