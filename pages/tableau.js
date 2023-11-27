@@ -1,3 +1,4 @@
+import { Flex, Text, Input, Heading, FormControl, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { contractAddress } from 'config/constants';
 import React from 'react';
@@ -5,45 +6,27 @@ import SimpleDate  from '/components/SimpleDate';
 import { useWalletContext } from 'utils/WalletContext';
 
  function tableau(){
-  const [json, setJson] = useState(null);
+  const [commandes, setCommandes] = useState([]);
   const { isAccountConnected, privateProvider, contractDemonstrateurProvider } = useWalletContext();
 
   useEffect(() => {
     if(isAccountConnected) {
       getDatas();
-      console.log("useEffect json : "+json);
     }
   }, [isAccountConnected])
 
   const getDatas = async() => {
-    console.log(await contractDemonstrateurProvider.getJsonCommandes());
-    setJson(await contractDemonstrateurProvider.getJsonCommandes());
+    setCommandes(await contractDemonstrateurProvider.getListeCommandes());
   }
+  const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractAddress+"/";
 
-  if(json!=null) {
-    const data = JSON.parse(json);
-    const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractAddress+"/";
-    const DisplayData=data.map(
-        (info)=>{
-            return(
-                <tr key={info.id}>
-                    <td><a href={href+info.id} target="_blank">{info.id}</a></td>
-                    <td><span className="infobulle" aria-label={info.fournisseur}>{info.nomFournisseur}</span></td>
-                    <td><span className="infobulle" aria-label={info.client}>{info.nomClient}</span></td>
-                    <td>{info.nomMateriel}</td>
-                    <td>{info.referenceMateriel}</td>
-                    <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateExpedition}</SimpleDate></td>
-                    <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{info.dateReception}</SimpleDate></td>
-                    <td><span className="infobulle" aria-label={info.addressReception}>{info.nomReception}</span></td>
-                    <td>{info.workflowState}</td>
-                </tr>
-            )
-        }
-      )
-      
-      return (
-          <div>
-             <center>
+  return (
+    <Flex width="full" align="center" justifyContent="center">
+      {(isAccountConnected ? (
+        <Box p={2}>
+          {(commandes.length ? (
+            <div>
+              <center>
               <table className="table table-striped">
                   <thead>
                       <tr>
@@ -59,13 +42,36 @@ import { useWalletContext } from 'utils/WalletContext';
                       </tr>
                   </thead>
                   <tbody>
-                    {DisplayData}
+                  {commandes.map(commande => (
+                    <tr key={commande[0]}>
+                        <td><a href={href+commande[0]} target="_blank">{commande[0].toString()}</a></td>
+                        <td><span className="infobulle" aria-label={commande[1]}>{commande[2]}</span></td>
+                        <td><span className="infobulle" aria-label={commande[3]}>{commande[4]}</span></td>
+                        <td>{commande[6]}</td>
+                        <td>{commande[7]}</td>
+                        <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{commande[9]}</SimpleDate></td>
+                        <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{commande[10]}</SimpleDate></td>
+                        <td><span className="infobulle" aria-label={commande[11]}>{commande[12]}</span></td>
+                        <td>{commande[13]}</td>
+                    </tr>
+                  ))}
                   </tbody>
               </table>
-             </center>
-            </div>
-      )
-    }       
+              </center>
+              </div>
+                ) :
+                (  
+                    <Text>Pas de commandes</Text>
+                ))}
+        </Box>
+        ) : (
+          <Box boxSize='100%' margin="100">
+              <Text align="center">Pas connecté</Text>
+          </Box>          
+      ))}
+  </Flex>
+
+  )
 }
 
 export default tableau;
