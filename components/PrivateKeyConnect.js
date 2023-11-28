@@ -54,7 +54,6 @@ function PrivateKeyConnect({ fromPage, privatekeytest }) {
     return (
 		(fromPage === 'header'  ? (
 			<Stack flex={{ base: 1, md: 0 }} justify={'flex-end'} direction={'row'} spacing={6}>
-			<Input id="privateKey" placeholder="Clé privée" size="64" width='64' />
 			<Button as={'a'} display={{ base: 'none', md: 'inline-flex' }}
 				fontSize={'sm'} fontWeight={600} color={'white'} bg={'blue.400'} href={'#'} _hover={{bg: 'blue.300',}}
 				onClick={() => privateConnect('736ba90ed7a5842baf9f61b17e9c04c56ca21efa0f5e12b2bf0140629a3df058')}>
