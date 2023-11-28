@@ -1,6 +1,6 @@
 import { Flex, Text, Input, Heading, FormControl, Button, FormLabel, useToast, Box } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { contractAddress } from 'config/constants';
+import { contractDemonstrateurAddress } from 'config/constants';
 import React from 'react';
 import SimpleDate  from '/components/SimpleDate';
 import { useWalletContext } from 'utils/WalletContext';
