@@ -18,7 +18,7 @@ import { useWalletContext } from 'utils/WalletContext';
   const getDatas = async() => {
     setCommandes(await contractDemonstrateurProvider.getListeCommandes());
   }
-  const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractAddress+"/";
+  const href = "https://testnets.opensea.io/fr/assets/mumbai/"+contractDemonstrateurAddress+"/";
 
   return (
     <Flex width="full" align="center" justifyContent="center">
