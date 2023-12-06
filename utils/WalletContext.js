@@ -17,6 +17,8 @@ export const WalletContextProvider = ({ children }) => {
   const [contractRoleSigner, setContractRoleSigner] = useState(null);
   const [contractMaterielProvider, setContractMaterielProvider] = useState(null);
   const [contractMaterielSigner, setContractMaterielSigner] = useState(null); 
+  const [contractHistoriqueProvider, setContractHistoriqueProvider] = useState(null);
+  const [contractHistoriqueSigner, setContractHistoriqueSigner] = useState(null);
 
   return (
       <WalletContext.Provider value={{ isAccountConnected, setIsAccountConnected, addressConnected, setAddressConnected, 
@@ -24,6 +26,7 @@ export const WalletContextProvider = ({ children }) => {
         contractDemonstrateurProvider, setContractDemonstrateurProvider, contractDemonstrateurSigner, setContractDemonstrateurSigner,
         contractRoleProvider, setContractRoleProvider, contractRoleSigner, setContractRoleSigner,
         contractMaterielProvider, setContractMaterielProvider, contractMaterielSigner, setContractMaterielSigner,
+        contractHistoriqueProvider, setContractHistoriqueProvider, contractHistoriqueSigner, setContractHistoriqueSigner,
         privateSigner, setPrivateSigner, privateProvider, setPrivateProvider }}>
         {children}
       </WalletContext.Provider>
