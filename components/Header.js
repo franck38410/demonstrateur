@@ -3,15 +3,17 @@ import { Flex, Image, Button, Stack, useToast } from '@chakra-ui/react';
 import { useAccount, useConnect, useDisconnect, useProvider, useSigner, useWebSocketProvider   } from 'wagmi';
 import ActiveLink from 'components/ActiveLink';
 import RoleLink from 'components/RoleLink';
-import { privateProvider, contractDemonstrateurAddress, contractRoleAddress, contractMaterielAddress } from 'config/constants';
+import { privateProvider, contractDemonstrateurAddress, contractRoleAddress, contractMaterielAddress, contractHistoriqueAddress } from 'config/constants';
 import Contract from '/config/Demonstrateur.json';
 import ContractRole from '/config/Role.json';
 import ContractMateriel from '/config/Materiel.json';
+import ContractHistorique from '/config/Historique.json';
 import { ethers } from 'ethers';
 import { useWalletContext } from 'utils/WalletContext';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import PrivateKeyConnect from 'components/PrivateKeyConnect';
+import { EventHistorique } from 'components/EventHistorique';
 
 export default function Header() {
 	const router = useRouter();
@@ -26,8 +28,9 @@ export default function Header() {
 	const { isAccountConnected, setIsAccountConnected, addressConnected, setAddressConnected, 
 		nomConnected, setNomConnected, versionContrat, setVersionContrat,
 		contractDemonstrateurProvider, setContractDemonstrateurProvider, setContractDemonstrateurSigner, 
-		contractRoleProvider, setContractRoleProvider, contractRoleSigner, setContractRoleSigner, 
+		contractRoleProvider, setContractRoleProvider, setContractRoleSigner, 
 		setContractMaterielProvider, setContractMaterielSigner, 
+		setContractHistoriqueProvider, setContractHistoriqueSigner, 
 		privateSigner, setPrivateSigner, setPrivateProvider} = useWalletContext();
 		
 	const deconnexion = async() => {
@@ -45,6 +48,8 @@ export default function Header() {
 			setContractRoleSigner(null);
 			setContractMaterielProvider(null);
 			setContractMaterielSigner(null);
+			setContractHistoriqueProvider(null);
+			setContractHistoriqueSigner(null);
 			disconnect();
 		}
 		catch {
@@ -96,10 +101,14 @@ export default function Header() {
 			setContractRoleSigner(new ethers.Contract(contractRoleAddress, ContractRole.abi, signer));
 			setContractMaterielProvider(new ethers.Contract(contractMaterielAddress, ContractMateriel.abi, provider));
 			setContractMaterielSigner(new ethers.Contract(contractMaterielAddress, ContractMateriel.abi, signer));
+			setContractHistoriqueProvider(new ethers.Contract(contractHistoriqueAddress, ContractHistorique.abi, provider));
+			setContractHistoriqueSigner(new ethers.Contract(contractHistoriqueAddress, ContractHistorique.abi, signer));
 			getDatas();
 			console.log("fin publicConnect");
 		}
 	}, [isConnected, signer, provider]);
+
+	EventHistorique();
 
     return (
         <Flex height="15vh" justifyContent="space-between" alignItems="center" p="2rem">
