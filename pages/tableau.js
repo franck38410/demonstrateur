@@ -4,6 +4,8 @@ import { contractDemonstrateurAddress } from 'config/constants';
 import React from 'react';
 import SimpleDate  from '/components/SimpleDate';
 import { useWalletContext } from 'utils/WalletContext';
+import ActiveLink from 'components/ActiveLink'
+import WorkflowLabel from 'components/WorkflowLabel'
 
  function tableau(){
   const [commandes, setCommandes] = useState([]);
@@ -30,7 +32,7 @@ import { useWalletContext } from 'utils/WalletContext';
               <table className="table table-striped">
                   <thead>
                       <tr>
-                      <th>Id</th>
+                      <th>Id Token</th>
                       <th>Fournisseur</th>
                       <th>Client</th>
                       <th>Matériel</th>
@@ -39,6 +41,7 @@ import { useWalletContext } from 'utils/WalletContext';
                       <th>Date Recep</th>
                       <th>Recep par</th>
                       <th>Etat</th>
+                      <th>Historique</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -52,7 +55,8 @@ import { useWalletContext } from 'utils/WalletContext';
                         <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{commande[9]}</SimpleDate></td>
                         <td><SimpleDate dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{commande[10]}</SimpleDate></td>
                         <td><span className="infobulle" aria-label={commande[11]}>{commande[12]}</span></td>
-                        <td>{commande[13]}</td>
+                        <td><span className="infobulle" aria-label={commande[13]}>{WorkflowLabel(commande[13].toString())}</span></td>
+                        <td><center><ActiveLink children="Parcours" href="/historique"/></center></td>
                     </tr>
                   ))}
                   </tbody>

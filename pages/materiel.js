@@ -19,9 +19,17 @@ export default function materiel() {
       // fonction qui récupére les Materiels  
       setMateriels(await contractMaterielProvider.getListeMateriels());
     }
-/*
+
     useEffect(() => {
-        contractMaterielProvider.on("AjouterMaterielEvent", (sender, addressFss, nomMateriel, ipfs, urlImage) => {
+        contractMaterielProvider.on("AjouterMaterielEvent", (sender, addressFss, nomMateriel, ipfs, urlImage, event) => {
+          console.log(event.blockNumber);
+          console.log(event.blockHash);
+          console.log(event.transactionHash);
+          // adresse du contrat
+          console.log(event.address);
+          const args = event.args
+          console.log(`${ args.sender }`);
+
           toast({
               title: 'Vous avez bien ajouté le materiel :',
               description: nomMateriel,
@@ -30,12 +38,11 @@ export default function materiel() {
               isClosable: true,
           })
         })
-        getDatas();
         return () => {
           contractMaterielProvider.removeAllListeners();
         };
     }, [])
-*/
+
     const ajouterMateriel = async(nomMateriel, cid ) => {
       try {
         console.log("ajouterMateriel nomMateriel= "+nomMateriel+" cid= "+cid);

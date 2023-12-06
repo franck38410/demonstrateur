@@ -5,8 +5,8 @@ import { useWalletContext } from 'utils/WalletContext';
 export default function tokenisation() {
     const toast = useToast();
     const [materiels, setMateriels] = useState([]);
-    const { isAccountConnected, contractDemonstrateurSigner, contractMaterielProvider } = useWalletContext();
-
+    const { isAccountConnected, contractDemonstrateurProvider, contractDemonstrateurSigner, contractMaterielProvider, contractHistoriqueSigner } = useWalletContext();
+    
     useEffect(() => {
       if(isAccountConnected) {
         getDatas();
@@ -18,7 +18,7 @@ export default function tokenisation() {
       setMateriels(await contractMaterielProvider.getListeMateriels());
       console.log("getListeMateriels= "+await contractMaterielProvider.getListeMateriels());
     }
-  
+
   const tokenisation = async(nomMateriel, referenceMateriel) => {
     try {
       console.log("tokenisation nomMateriel= "+nomMateriel+" referenceMateriel= "+referenceMateriel);

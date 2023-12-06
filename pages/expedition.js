@@ -24,7 +24,7 @@ export default function expedition() {
       // fonction qui récupére les iots  
       setIots(await contractRoleProvider.getListeIots());
     }
-
+    
   const expedier = async(client, iot, itemId) => {
     try {
       // fonction d'expédition d'un matériel  
